@@ -1,6 +1,6 @@
 {
   "name": "appium-support",
-  "description": "Description goes here.",
+  "description": "Support libs used across appium packages.",
   "keywords": [
     "appium"
   ],

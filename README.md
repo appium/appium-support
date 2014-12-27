@@ -1,5 +1,5 @@
 appium-support
 ===================
 
-Work in progress, stay tuned!
+Support libs used across appium packages.
 
