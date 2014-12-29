@@ -6,7 +6,7 @@ Support libs used across appium packages.
 ## Watch
 
 ```
-npm run-script watch
+npm run watch
 ```
 
 ## Test
