@@ -35,7 +35,7 @@ gulp.task('test',  function () {
 
 process.env.APPIUM_NOTIF_BUILD_NAME = 'appium-support';
 
-spawnWatcher.configure('watch', ['lib/**/*.js','test/**/*.js'], function () {
+spawnWatcher.configure('watch', ['index.js', 'lib/**/*.js','test/**/*.js'], function () {
   return runSequence('lint', 'test');
 });
 
