@@ -26,7 +26,7 @@
     "q": "^1.1.2"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha tests/**/*-specs.js"
+    "test": "./node_modules/.bin/mocha test/**/*-specs.js"
   },
   "devDependencies": {
     "chai": "^1.10.0",
