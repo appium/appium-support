@@ -1,4 +1,5 @@
 module.exports = {
   tempDir: require('./lib/tempdir'),
-  system: require('./lib/system')
+  system: require('./lib/system'),
+  util: require('./lib/util')
 };
