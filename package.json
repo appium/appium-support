@@ -4,7 +4,7 @@
   "keywords": [
     "appium"
   ],
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "appium",
   "license": "Apache License 2.0",
   "repository": {
@@ -23,8 +23,8 @@
     "lib": "lib"
   },
   "dependencies": {
-    "lodash": "^3.6.0",
-    "q": "^1.1.2"
+    "bluebird": "^2.9.21",
+    "lodash": "^3.6.0"
   },
   "scripts": {
     "test": "./node_modules/.bin/gulp once",

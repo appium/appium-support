@@ -1,7 +1,6 @@
 "use strict";
 
 var util = require('..').util
-  , exec = require('child_process').exec
   , chai = require('chai');
 
 var should = chai.should();
