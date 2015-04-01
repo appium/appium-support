@@ -46,4 +46,22 @@ describe('util', function () {
       util.hasContent(e).should.be.false;
     });
   });
+
+  describe("fileExists", function () {
+    it("should return true if file is readable", function () {
+      return util
+        .fileExists('/')
+        .then(function (bool) {
+          bool.should.be.true;
+        });
+    });
+
+    it("should return false if file does not exist", function () {
+      return util
+        .fileExists('chuckwudi')
+        .then(function (bool) {
+          bool.should.be.false;
+        });
+    });
+  });
 });
