@@ -47,6 +47,26 @@ describe('util', function () {
     });
   });
 
+  describe("escapeSpace", function () {
+    it("should do nothign to a string without space", function () {
+      var actual = 'appium';
+      var expected = 'appium';
+      util.escapeSpace(actual).should.equal(expected);
+    });
+
+    it("should do escape spaces", function () {
+      var actual = '/Applications/ Xcode 6.1.1.app/Contents/Developer';
+      var expected = '/Applications/\\ Xcode\\ 6.1.1.app/Contents/Developer';
+      util.escapeSpace(actual).should.equal(expected);
+    });
+
+    it("should escape consecutive spaces", function () {
+      var actual = 'appium   space';
+      var expected = 'appium\\ \\ \\ space';
+      util.escapeSpace(actual).should.equal(expected);
+    });
+  });
+
   describe("fileExists", function () {
     it("should return true if file is readable", function () {
       return util
