@@ -84,4 +84,11 @@ describe('util', function () {
         });
     });
   });
+
+  describe("localIp", function () {
+    it("should find a local ip address", function () {
+      var ip = util.localIp();
+      ip.should.match(/\d*\.\d*\.\d*\.\d*/);
+    });
+  });
 });
