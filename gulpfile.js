@@ -2,9 +2,9 @@
 
 var gulp = require('gulp'),
     mocha = require('gulp-mocha'),
-    Q = require('q'),
+    B = require('bluebird'),
     spawnWatcher = require('appium-gulp-plugins').spawnWatcher.use(gulp),
-    runSequence = Q.denodeify(require('run-sequence')),
+    runSequence = B.promisify(require('run-sequence')),
     jshint = require('gulp-jshint'),
     jscs = require('gulp-jscs');
 
