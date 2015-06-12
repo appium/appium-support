@@ -1,8 +1,12 @@
 "use strict";
 
 var util = require('..').util
+  , rimraf = require('rimraf')
+  , path = require('path')
+  , chaiAsPromised = require('chai-as-promised')
   , chai = require('chai');
 
+chai.use(chaiAsPromised);
 var should = chai.should();
 
 describe('util', function () {
@@ -89,6 +93,33 @@ describe('util', function () {
     it("should find a local ip address", function () {
       var ip = util.localIp();
       ip.should.match(/\d*\.\d*\.\d*\.\d*/);
+    });
+  });
+
+  describe("mkdirp", function () {
+    var dirName = path.resolve(__dirname, "tmp");
+    it("should make a directory that doesn't exist", function (done) {
+      rimraf(dirName, function (err) {
+        if (err) return done(err);
+        util.mkdirp(dirName).then(function () {
+          util.fileExists(dirName).then(function (exists) {
+            exists.should.be.true;
+            done();
+          }).catch(done);
+        }).catch(done);
+      });
+    });
+
+    it("should not complain if the dir already exists", function (done) {
+      util.fileExists(dirName).then(function (exists) {
+        exists.should.be.true;
+        util.mkdirp(dirName).then(done).catch(done);
+      }).catch(done);
+    });
+
+    it("should still throw an error if something else goes wrong", function (done) {
+      util.mkdirp("/bin/foo").should.eventually.be.rejectedWith('EACCES')
+                             .then(done).catch(done);
     });
   });
 });
