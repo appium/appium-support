@@ -1,10 +1,10 @@
 {
   "name": "appium-support",
-  "description": "Description goes here.",
+  "description": "Support libs used across appium packages",
   "keywords": [
     "appium"
   ],
-  "version": "0.0.0",
+  "version": "2.0.0",
   "author": "appium",
   "license": "Apache-2.0",
   "repository": {
@@ -26,8 +26,10 @@
     "babel-runtime": "=5.5.5",
     "source-map-support": "^0.3.1",
     "appium-logger":"1.0.0",
-    "blue-bird": "^1.0.0",
-
+    "teen_process": "^1.0.0",
+    "bluebird": "^2.9.25",
+    "lodash": "^3.10.0",
+    "sinon": "^1.0.0"
   },
   "scripts": {
     "prepublish": "./node_modules/.bin/gulp prepublish",
@@ -41,7 +43,7 @@
     "gulp": "^3.8.11",
     "mochawait": "^2.0.0",
     "yargs": "^3.10.0",
-    "rimraf": "1.0.0",
-    "teen_process": "1.0.0"
+    "rimraf": "^1.0.0",
+    "gulp-mocha": "^1.0.0"
   }
 }

@@ -7,9 +7,9 @@ import chai from 'chai';
 chai.should();
 
 describe('tempdir', function () {
-  it('should be able to generate a path', function () {
-    let path = tempDir.path({prefix: 'myfile', suffix: '.tmp'});
-    path.should.exists;
+  it('should be able to generate a path', async function () {
+    let path = await tempDir.path({prefix: 'myfile', suffix: '.tmp'});
+    path.should.exist;
     path.should.include('myfile.tmp');
   });
 
