@@ -1,9 +1,8 @@
-"use strict";
+'use strict';
+import * as system from '../lib/system';
+import chai from 'chai';
 
-var system = require('..').system,
-    chai = require('chai');
-
-var should = chai.should();
+let should = chai.should();
 
 describe('system', function () {
   it('should exist', function () {
@@ -12,12 +11,9 @@ describe('system', function () {
     should.exist(system.isMac);
   });
   if (system.isLinux || system.isMac) {
-    it('should know architecture', function (done) {
-      system.arch(function (err, arch) {
-        should.not.exist(err);
-        ["32", "64"].should.contain(arch);
-        done();
-      });
+    it('should know architecture', async function () {
+      let arch = await system.arch();
+      ["32", "64"].should.contain(arch);
     });
   }
 });

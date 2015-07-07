@@ -1,16 +1,20 @@
 "use strict";
 
-var util = require('..').util
-  , rimraf = require('rimraf')
-  , path = require('path')
-  , chaiAsPromised = require('chai-as-promised')
-  , chai = require('chai');
+import * as util from '../lib/util';
+import rimraf from 'rimraf';
+import path from 'path';
+import chaiAsPromised from 'chai-as-promised';
+import chai from 'chai';
+import { getLogger } from 'appium-logger';
+import B from 'bluebird';
 
+let promisifiedRimraf= B.promisify(rimraf);
+const logger = getLogger('Appium-Support');
 chai.use(chaiAsPromised);
-var should = chai.should();
+let should = chai.should();
 
 describe('util', function () {
-  var nan = NaN
+  let nan = NaN
     , none = null
     , f = function () {
     }
@@ -53,73 +57,77 @@ describe('util', function () {
 
   describe("escapeSpace", function () {
     it("should do nothign to a string without space", function () {
-      var actual = 'appium';
-      var expected = 'appium';
+      let actual = 'appium';
+      let expected = 'appium';
       util.escapeSpace(actual).should.equal(expected);
     });
 
     it("should do escape spaces", function () {
-      var actual = '/Applications/ Xcode 6.1.1.app/Contents/Developer';
-      var expected = '/Applications/\\ Xcode\\ 6.1.1.app/Contents/Developer';
+      let actual = '/Applications/ Xcode 6.1.1.app/Contents/Developer';
+      let expected = '/Applications/\\ Xcode\\ 6.1.1.app/Contents/Developer';
       util.escapeSpace(actual).should.equal(expected);
     });
 
     it("should escape consecutive spaces", function () {
-      var actual = 'appium   space';
-      var expected = 'appium\\ \\ \\ space';
+      let actual = 'appium   space';
+      let expected = 'appium\\ \\ \\ space';
       util.escapeSpace(actual).should.equal(expected);
     });
   });
 
   describe("fileExists", function () {
-    it("should return true if file is readable", function () {
-      return util
-        .fileExists('/')
-        .then(function (bool) {
-          bool.should.be.true;
-        });
+    it("should return true if file is readable", async function () {
+      let exists = await util.fileExists('/');
+      exists.should.be.true;
+      
     });
 
-    it("should return false if file does not exist", function () {
-      return util
-        .fileExists('chuckwudi')
-        .then(function (bool) {
-          bool.should.be.false;
-        });
+    it("should return false if file does not exist", async function () {
+      let exists = await util.fileExists('chuckwudi');
+      exists.should.be.false;
+      
+       
     });
   });
 
   describe("localIp", function () {
     it("should find a local ip address", function () {
-      var ip = util.localIp();
+      let ip = util.localIp();
       ip.should.match(/\d*\.\d*\.\d*\.\d*/);
     });
   });
 
   describe("mkdirp", function () {
-    var dirName = path.resolve(__dirname, "tmp");
-    it("should make a directory that doesn't exist", function (done) {
-      rimraf(dirName, function (err) {
-        if (err) return done(err);
-        util.mkdirp(dirName).then(function () {
-          util.fileExists(dirName).then(function (exists) {
-            exists.should.be.true;
-            done();
-          }).catch(done);
-        }).catch(done);
-      });
-    });
-
-    it("should not complain if the dir already exists", function (done) {
-      util.fileExists(dirName).then(function (exists) {
+    let dirName = path.resolve(__dirname, "tmp");
+    
+    it("should make a directory that doesn't exist", async function () {
+      try { 
+        promisifiedRimraf(dirName); 
+      } catch (err) {
+        logger.errorAndThrow(err); 
+      }
+      await util.mkdirp(dirName);
+      try {
+        let exists = await util.fileExists(dirName);
         exists.should.be.true;
-        util.mkdirp(dirName).then(done).catch(done);
-      }).catch(done);
+      } catch (err) {
+        logger.errorAndThrow(err);
+      }
+    });
+    
+    it("should not complain if the dir already exists", async function () {
+      try {
+        let exists = await util.fileExists(dirName);
+        exists.should.be.true;
+        await util.mkdirp(dirName);
+      } catch (err) { 
+        logger.errorAndThrow(err);
+      }
     });
 
-    it("should still throw an error if something else goes wrong", function (done) {
-      util.mkdirp("/bin/foo").should.eventually.be.rejectedWith('EACCES')
-                             .then(done).catch(done);
+    it("should still throw an error if something else goes wrong", function () {
+      util.mkdirp("/bin/foo").should.eventually.be.rejectedWith('EACCES');                 
     });
   });
 });
+

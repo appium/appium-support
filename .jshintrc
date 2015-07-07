@@ -1,10 +1,19 @@
 {
   "laxcomma": true,
+<<<<<<< HEAD
+=======
   "strict": true,
+>>>>>>> f6d102bef11cb0c02e0ef785861f1a3b16fe2f10
   "undef": true,
   "unused": true,
   "node": true,
   "eqeqeq": true,
   "trailing": true,
+<<<<<<< HEAD
+  "indent": 2,
+  "esnext": true,
+  "experimental": ["asyncawait"]
+=======
   "indent": 2
+>>>>>>> f6d102bef11cb0c02e0ef785861f1a3b16fe2f10
 }
