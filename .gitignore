@@ -1,3 +1,8 @@
 node_modules
+<<<<<<< HEAD
 build
 *.log
+=======
+*.log
+
+>>>>>>> f6d102bef11cb0c02e0ef785861f1a3b16fe2f10

@@ -8,7 +8,7 @@ chai.should();
 
 describe('tempdir', function () {
   it('should be able to generate a path', function () {
-    var path = tempDir.path({prefix: 'myfile', suffix: '.tmp'});
+    let path = tempDir.path({prefix: 'myfile', suffix: '.tmp'});
     path.should.exists;
     path.should.include('myfile.tmp');
   });
