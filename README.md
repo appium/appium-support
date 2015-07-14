@@ -1,16 +1,5 @@
-appium-support
-===================
+#appium-support
 
-Support libs used across appium packages.
+Used to support libs used across appium packages.
 
-## Watch
 
-```
-npm run watch
-```
-
-## Test
-
-```
-npm test
-```
