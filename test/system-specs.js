@@ -11,13 +11,11 @@ describe('system', function () {
     should.exist(system.isLinux);
     should.exist(system.isMac);
   });
-  if (system.isLinux || system.isMac) {
-    it('should know architecture', function (done) {
-      system.arch(function (err, arch) {
-        should.not.exist(err);
-        ["32", "64"].should.contain(arch);
-        done();
-      });
+  it('should know architecture', function (done) {
+    system.arch(function (err, arch) {
+      should.not.exist(err);
+      ["32", "64"].should.contain(arch);
+      done();
     });
-  }
+  });
 });
