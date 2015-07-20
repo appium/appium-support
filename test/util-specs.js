@@ -1,6 +1,6 @@
 "use strict";
 
-import * as util from '../lib/util';
+import { util } from '../..';
 import _rimraf from 'rimraf';
 import path from 'path';
 import chai from 'chai';
@@ -22,7 +22,7 @@ describe('util', function () {
       util.hasValue(undefined).should.be.false;
     });
 
-    it('should handle not a number', function () { 
+    it('should handle not a number', function () {
       util.hasValue(NaN).should.be.false;
     });
 
@@ -121,7 +121,7 @@ describe('util', function () {
     it("should return true if file is readable", async function () {
       let exists = await util.hasAccess('/');
       exists.should.be.true;
-      
+
     });
 
     it("should return false if file does not exist", async function () {
@@ -141,14 +141,14 @@ describe('util', function () {
 
   describe("mkdir", function () {
     let dirName = path.resolve(__dirname, "tmp");
-    
+
     it("should make a directory that doesn't exist", async function () {
-      await rimraf(dirName); 
+      await rimraf(dirName);
       await util.mkdir(dirName);
       let exists = await util.hasAccess(dirName);
-      exists.should.be.true;   
+      exists.should.be.true;
     });
-    
+
     it("should not complain if the dir already exists", async function () {
         let exists = await util.hasAccess(dirName);
         exists.should.be.true;
@@ -156,7 +156,7 @@ describe('util', function () {
     });
 
     it("should still throw an error if something else goes wrong", async function () {
-      await util.mkdir("/bin/foo").should.be.rejected;                
+      await util.mkdir("/bin/foo").should.be.rejected;
     });
   });
 });
