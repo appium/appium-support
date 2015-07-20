@@ -1,6 +1,6 @@
 "use strict";
 
-import * as tempDir from '../lib/tempdir';
+import { tempDir } from '../..';
 import fs from 'fs';
 import chai from 'chai';
 

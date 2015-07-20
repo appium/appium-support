@@ -1,5 +1,5 @@
 
-import * as system from '../lib/system';
+import { system } from '../..';
 import chai from 'chai';
 import os from 'os';
 import sinon from 'sinon';
@@ -15,7 +15,7 @@ let libs = {teen_process, os, system};
 
 describe('system', function () {
   describe('isX functions', function () {
-    it('should correctly return Windows System if it is a Windows', function () { 
+    it('should correctly return Windows System if it is a Windows', function () {
       let osMock = sinon.mock(os);
       osMock.expects('type').returns('Windows_NT');
       system.isWindows().should.equal.true;
@@ -23,7 +23,7 @@ describe('system', function () {
       osMock.restore();
     });
 
-    it('should correctly return Mac if it is a Mac', function () { 
+    it('should correctly return Mac if it is a Mac', function () {
       let osMock = sinon.mock(os);
       osMock.expects('type').returns('Darwin');
       system.isMac().should.equal.true;
@@ -40,7 +40,7 @@ describe('system', function () {
     });
   });
 
-  describe('architecture', function () { 
+  describe('architecture', function () {
     beforeEach(() => {
       sandbox = sinon.sandbox.create();
       mocks[SANDBOX] = sandbox;
@@ -53,7 +53,7 @@ describe('system', function () {
       sandbox.restore();
     });
 
-    it('should return correct architecture if it is a 64 bit Mac/Linux', async function() {      
+    it('should return correct architecture if it is a 64 bit Mac/Linux', async function() {
       mocks.os.expects('type').thrice().returns('Darwin');
       mocks.teen_process.expects('exec').once().withExactArgs('uname', ['-m']).returns({stdout: 'x86_64'});
       let arch = await system.arch();
