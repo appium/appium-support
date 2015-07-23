@@ -24,7 +24,7 @@ describe('fs', function () {
     let nonExistingPath = path.resolve(__dirname, 'wrong-specs.js');
     (await fs.hasAccess(nonExistingPath)).should.not.be.ok;
   });
-  it.only('exists', async () => {
+  it('exists', async () => {
     let existingPath = path.resolve(__dirname, 'fs-specs.js');
     (await fs.exists(existingPath)).should.be.ok;
     let nonExistingPath = path.resolve(__dirname, 'wrong-specs.js');
