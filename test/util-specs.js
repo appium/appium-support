@@ -4,12 +4,13 @@ import { util } from '../..';
 import _rimraf from 'rimraf';
 import path from 'path';
 import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
 import sinon from 'sinon';
 
 let rimraf = B.promisify(_rimraf);
 let should = chai.should();
-
+chai.use(chaiAsPromised);
 
 describe('util', function () {
 
@@ -157,6 +158,17 @@ describe('util', function () {
 
     it("should still throw an error if something else goes wrong", async function () {
       await util.mkdir("/bin/foo").should.be.rejected;
+    });
+  });
+
+  describe("cancellableDelay", function () {
+    it("should delay", async function () {
+      await util.cancellableDelay('10');
+    });
+    it("cancel should work", async function () {
+      let delay = util.cancellableDelay('1000');
+      B.delay(10).then(function() { delay.cancel(); }).done();
+      await delay.should.be.rejectedWith(/cancellation error/);
     });
   });
 });
