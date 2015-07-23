@@ -18,7 +18,13 @@ describe('fs', function () {
     should.exist(fs.readlink);
     should.exist(fs.exists);
   });
-  it('exists', async () => {
+  it('hasAccess', async () => {
+    let existingPath = path.resolve(__dirname, 'fs-specs.js');
+    (await fs.exists(existingPath)).should.be.ok;
+    let nonExistingPath = path.resolve(__dirname, 'wrong-specs.js');
+    (await fs.hasAccess(nonExistingPath)).should.not.be.ok;
+  });
+  it.only('exists', async () => {
     let existingPath = path.resolve(__dirname, 'fs-specs.js');
     (await fs.exists(existingPath)).should.be.ok;
     let nonExistingPath = path.resolve(__dirname, 'wrong-specs.js');
