@@ -27,6 +27,7 @@
     "babel-runtime": "=5.6.16",
     "bluebird": "^2.9.25",
     "lodash": "^3.10.0",
+    "rimraf": "^2.4.1",
     "source-map-support": "^0.3.1",
     "teen_process": "^1.0.0"
   },
@@ -40,7 +41,6 @@
     "chai": "^3.0.0",
     "chai-as-promised": "^5.1.0",
     "gulp": "^3.8.11",
-    "rimraf": "^2.4.1",
     "sinon": "^1.0.0"
   }
 }
