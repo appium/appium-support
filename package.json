@@ -4,7 +4,7 @@
   "keywords": [
     "appium"
   ],
-  "version": "2.0.0-beta10",
+  "version": "2.0.0-beta11",
   "author": "appium",
   "license": "Apache-2.0",
   "repository": {
@@ -23,6 +23,7 @@
     "lib": "lib"
   },
   "dependencies": {
+    "MD5": "^1.3.0",
     "appium-logger": "^1.0.0",
     "babel-runtime": "=5.6.16",
     "bluebird": "^2.9.25",

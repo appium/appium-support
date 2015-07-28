@@ -47,5 +47,9 @@ describe('fs', function () {
     await fs.rimraf(newPath);
     await fs.exists(newPath).should.eventually.be.false;
   });
+  it('md5', async () => {
+    let existingPath = path.resolve(__dirname, 'fs-specs.js');
+    await fs.md5(existingPath).should.eventually.have.length(32);
+  });
 });
 
