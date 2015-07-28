@@ -30,5 +30,9 @@ describe('fs', function () {
     let nonExistingPath = path.resolve(__dirname, 'wrong-specs.js');
     (await fs.exists(nonExistingPath)).should.not.be.ok;
   });
+  it('readFile', async () => {
+    let existingPath = path.resolve(__dirname, 'fs-specs.js');
+    await fs.readFile(existingPath, 'utf8').should.eventually.contain('readFile');
+  });
 });
 
