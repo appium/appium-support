@@ -4,7 +4,7 @@
   "keywords": [
     "appium"
   ],
-  "version": "2.0.0-beta9",
+  "version": "2.0.0-beta10",
   "author": "appium",
   "license": "Apache-2.0",
   "repository": {
@@ -27,6 +27,7 @@
     "babel-runtime": "=5.6.16",
     "bluebird": "^2.9.25",
     "lodash": "^3.10.0",
+    "ncp": "^2.0.0",
     "rimraf": "^2.4.1",
     "source-map-support": "^0.3.1",
     "teen_process": "^1.0.0"

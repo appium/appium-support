@@ -35,5 +35,17 @@ describe('fs', function () {
     let existingPath = path.resolve(__dirname, 'fs-specs.js');
     await fs.readFile(existingPath, 'utf8').should.eventually.contain('readFile');
   });
+  it('copyFile', async () => {
+    let existingPath = path.resolve(__dirname, 'fs-specs.js');
+    let newPath = path.resolve('/tmp', 'fs-specs.js');
+    await fs.copyFile(existingPath, newPath);
+    await fs.readFile(newPath, 'utf8').should.eventually.contain('readFile');
+  });
+  it('rimraf', async () => {
+    let newPath = path.resolve('/tmp', 'fs-specs.js');
+    await fs.exists(newPath).should.eventually.be.true;
+    await fs.rimraf(newPath);
+    await fs.exists(newPath).should.eventually.be.false;
+  });
 });
 
