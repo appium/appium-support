@@ -17,6 +17,7 @@ describe('fs', function () {
     should.exist(fs.mkdir);
     should.exist(fs.readlink);
     should.exist(fs.exists);
+    should.exist(fs.rimraf);
   });
   it('hasAccess', async () => {
     let existingPath = path.resolve(__dirname, 'fs-specs.js');

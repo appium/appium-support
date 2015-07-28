@@ -7,4 +7,4 @@ import rimraf from './lib/rimraf';
 
 // can't add to other exports `as default`
 // until JSHint figures out how to parse that pattern
-export default { tempDir, system, util, fs, rimraf, cancellableDelay };
+export default {tempDir, system, util, fs, rimraf, cancellableDelay};
