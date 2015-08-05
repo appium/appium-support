@@ -33,23 +33,28 @@ describe('fs', function () {
   });
   it('readFile', async () => {
     let existingPath = path.resolve(__dirname, 'fs-specs.js');
-    await fs.readFile(existingPath, 'utf8').should.eventually.contain('readFile');
+    (await fs.readFile(existingPath, 'utf8')).should.contain('readFile');
   });
   it('copyFile', async () => {
     let existingPath = path.resolve(__dirname, 'fs-specs.js');
     let newPath = path.resolve('/tmp', 'fs-specs.js');
     await fs.copyFile(existingPath, newPath);
-    await fs.readFile(newPath, 'utf8').should.eventually.contain('readFile');
+    (await fs.readFile(newPath, 'utf8')).should.contain('readFile');
   });
   it('rimraf', async () => {
     let newPath = path.resolve('/tmp', 'fs-specs.js');
-    await fs.exists(newPath).should.eventually.be.true;
+    (await fs.exists(newPath)).should.be.true;
     await fs.rimraf(newPath);
-    await fs.exists(newPath).should.eventually.be.false;
+    (await fs.exists(newPath)).should.be.false;
   });
   it('md5', async () => {
     let existingPath = path.resolve(__dirname, 'fs-specs.js');
-    await fs.md5(existingPath).should.eventually.have.length(32);
+    (await fs.md5(existingPath)).should.have.length(32);
+  });
+  it('stat', async () => {
+    let existingPath = path.resolve(__dirname, 'fs-specs.js');
+    let stat = await fs.stat(existingPath);
+    stat.should.have.property('atime');
   });
 });
 
