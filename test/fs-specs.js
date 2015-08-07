@@ -18,8 +18,11 @@ describe('fs', function () {
     should.exist(fs.readlink);
     should.exist(fs.exists);
     should.exist(fs.rimraf);
-  });
-  it('hasAccess', async () => {
+    should.exist(fs.readFile);
+    should.exist(fs.writeFile);
+   });
+
+   it('hasAccess', async () => {
     let existingPath = path.resolve(__dirname, 'fs-specs.js');
     (await fs.exists(existingPath)).should.be.ok;
     let nonExistingPath = path.resolve(__dirname, 'wrong-specs.js');
