@@ -1,4 +1,3 @@
-"use strict";
 
 import { tempDir, fs } from '../..';
 import chai from 'chai';

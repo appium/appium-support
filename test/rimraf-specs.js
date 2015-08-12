@@ -1,4 +1,3 @@
-"use strict";
 
 import { rimraf } from '..';
 import chai from 'chai';

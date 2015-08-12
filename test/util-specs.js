@@ -1,4 +1,3 @@
-"use strict";
 
 import { util } from '../..';
 import _rimraf from 'rimraf';
