@@ -1,6 +1,5 @@
-"use strict";
 
-import { fs } from '..';
+import { fs } from '../..';
 import chai from 'chai';
 import path from 'path';
 
