@@ -13,7 +13,7 @@ describe('plist', () => {
     content.should.have.property('com.apple.locationd.bundle-/System/Library/PrivateFrameworks/Parsec.framework');
   });
 
-  it.only('should write plist file as binary', async () => {
+  it('should write plist file as binary', async () => {
     // create a temporary file, to which we will write
     let plistFile = path.resolve(await tempDir.openDir(), 'sample.plist');
     await fs.copyFile(plistPath, plistFile);
