@@ -59,4 +59,3 @@ describe('fs', function () {
     stat.should.have.property('atime');
   });
 });
-

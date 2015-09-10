@@ -1,5 +1,5 @@
 
-import { util } from '../..';
+import { util, fs } from '../..';
 import _rimraf from 'rimraf';
 import path from 'path';
 import chai from 'chai';
@@ -117,19 +117,6 @@ describe('util', function () {
     });
   });
 
-  describe("fileExists", function () {
-    it("should return true if file is readable", async function () {
-      let exists = await util.hasAccess('/');
-      exists.should.be.true;
-
-    });
-
-    it("should return false if file does not exist", async function () {
-      let exists = await util.hasAccess('chuckwudi');
-      exists.should.be.false;
-    });
-  });
-
   describe("localIp", function () {
     it("should find a local ip address", function () {
       let utilMock = sinon.mock(util);
@@ -145,12 +132,12 @@ describe('util', function () {
     it("should make a directory that doesn't exist", async function () {
       await rimraf(dirName);
       await util.mkdir(dirName);
-      let exists = await util.hasAccess(dirName);
+      let exists = await fs.hasAccess(dirName);
       exists.should.be.true;
     });
 
     it("should not complain if the dir already exists", async function () {
-        let exists = await util.hasAccess(dirName);
+        let exists = await fs.hasAccess(dirName);
         exists.should.be.true;
         await util.mkdir(dirName);
     });
@@ -171,4 +158,3 @@ describe('util', function () {
     });
   });
 });
-
