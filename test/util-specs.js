@@ -1,13 +1,10 @@
 
-import { util, fs } from '../..';
-import _rimraf from 'rimraf';
-import path from 'path';
+import { util } from '../..';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
 import sinon from 'sinon';
 
-let rimraf = B.promisify(_rimraf);
 let should = chai.should();
 chai.use(chaiAsPromised);
 
@@ -123,27 +120,6 @@ describe('util', function () {
       utilMock.expects('localIp').returns('10.35.4.175');
       util.localIp();
       utilMock.verify();
-    });
-  });
-
-  describe("mkdir", function () {
-    let dirName = path.resolve(__dirname, "tmp");
-
-    it("should make a directory that doesn't exist", async function () {
-      await rimraf(dirName);
-      await util.mkdir(dirName);
-      let exists = await fs.hasAccess(dirName);
-      exists.should.be.true;
-    });
-
-    it("should not complain if the dir already exists", async function () {
-        let exists = await fs.hasAccess(dirName);
-        exists.should.be.true;
-        await util.mkdir(dirName);
-    });
-
-    it("should still throw an error if something else goes wrong", async function () {
-      await util.mkdir("/bin/foo").should.be.rejected;
     });
   });
 
