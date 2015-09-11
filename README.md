@@ -1,3 +1,4 @@
+[![Coverage Status](https://coveralls.io/repos/appium/appium-support/badge.svg?branch=master&service=github)](https://coveralls.io/github/appium/appium-support?branch=master)
 #appium-support
 
 Utility functions used to support libs used across appium packages.
