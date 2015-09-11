@@ -86,11 +86,7 @@ describe('system', function () {
     });
   });
 
-  it('should know architecture', function (done) {
-    system.arch(function (err, arch) {
-      should.not.exist(err);
-      ["32", "64"].should.contain(arch);
-      done();
-    });
+  it('should know architecture', () => {
+    return system.arch();
   });
 });
