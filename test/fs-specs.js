@@ -1,5 +1,5 @@
 
-import { fs } from '../..';
+import { fs } from '../index.js';
 import chai from 'chai';
 import path from 'path';
 

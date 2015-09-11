@@ -1,5 +1,5 @@
 
-import { util } from '../..';
+import { util } from '../index.js';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';

@@ -1,11 +1,11 @@
 import chai from 'chai';
 import path from 'path';
-import { plist, tempDir, fs } from '../..';
+import { plist, tempDir, fs } from '../index.js';
 
 
 chai.should();
 
-const plistPath = path.resolve(__dirname, '..', '..', 'test', 'assets', 'sample.plist');
+const plistPath = path.resolve('test', 'assets', 'sample.plist');
 
 describe('plist', () => {
   it('should parse plist file as binary', async () => {

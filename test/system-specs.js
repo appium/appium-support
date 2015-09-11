@@ -1,5 +1,5 @@
 
-import { system } from '../..';
+import { system } from '../index.js';
 import chai from 'chai';
 import os from 'os';
 import sinon from 'sinon';

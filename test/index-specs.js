@@ -1,10 +1,9 @@
 
-import AppiumSupport from '../..';
-import { system, tempDir, util } from '../..';
+import AppiumSupport from '../index.js';
 import chai from 'chai';
 
 chai.should();
-
+let { system, tempDir, util } = AppiumSupport;
 
 describe('index', () => {
   describe('default', () => {

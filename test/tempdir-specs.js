@@ -1,5 +1,5 @@
 
-import { tempDir, fs } from '../..';
+import { tempDir, fs } from '../index.js';
 import chai from 'chai';
 
 chai.should();
@@ -38,4 +38,3 @@ describe('tempdir', function () {
     res.should.equal(res2);
   });
 });
-

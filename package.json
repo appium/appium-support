@@ -25,7 +25,7 @@
   "dependencies": {
     "md5": "^2.0.0",
     "appium-logger": "^1.0.0",
-    "babel-runtime": "=5.5.5",
+    "babel-runtime": "=5.8.20",
     "bluebird": "^2.9.25",
     "bplist-creator": "^0.0.6",
     "bplist-parser": "^0.1.0",

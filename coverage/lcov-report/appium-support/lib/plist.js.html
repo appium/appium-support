@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for appium-support/lib/plist.js</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../../prettify.css">
+    <link rel="stylesheet" href="../../base.css">
+    <style type='text/css'>
+        div.coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class="header high">
+    <h1>Code coverage report for <span class="entity">appium-support/lib/plist.js</span></h1>
+    <h2>
+        Statements: <span class="metric">91.49% <small>(86 / 94)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Branches: <span class="metric">94.29% <small>(33 / 35)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">85.71% <small>(6 / 7)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">65.22% <small>(15 / 23)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Ignored: <span class="metric">25 statements, 1 function, 14 branches</span> &nbsp;&nbsp;&nbsp;&nbsp;
+    </h2>
+    <div class="path"><a href="../../index.html">All files</a> &#187; <a href="index.html">appium-support/lib/</a> &#187; plist.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import xmlplist from 'plist';
+import bplistCreate from 'bplist-creator';
+import bplistParse from 'bplist-parser';
+import fs from './fs';
+import log from './logger';
+import _ from 'lodash';
+import B from 'bluebird';
+&nbsp;
+&nbsp;
+let parseFile = B.promisify(bplistParse.parseFile);
+&nbsp;
+// XML Plist library helper
+<span class="fstat-no" title="function not covered" >async function parseXmlPlistFile (plistFilename)</span> {
+  var <span class="cstat-no" title="statement not covered" >xmlContent </span>= await fs.readFile(plistFilename, 'utf8');
+  return  xmlplist.parse(xmlContent);
+}
+&nbsp;
+async function parsePlistFile (plist) {
+  log.debug(`Attempting to parse plist file '${plist}'`);
+  let obj;
+  try {
+    obj = await parseFile(plist);
+  } catch (ign) {
+<span class="cstat-no" title="statement not covered" >    log.debug('Could not parse plist file as binary');</span>
+<span class="cstat-no" title="statement not covered" >    log.debug('Will try to parse the plist file as XML');</span>
+    try {
+<span class="cstat-no" title="statement not covered" >      obj </span>= await parseXmlPlistFile(plist);
+    } catch (err) {
+<span class="cstat-no" title="statement not covered" >      log.errorAndThrow(`Could not parse plist file as XML: ${err.message}`);</span>
+    }
+<span class="cstat-no" title="statement not covered" >    log.debug('Parsed file as XML');</span>
+    return obj;
+  }
+  if (obj.length) {
+    log.debug('Parsed plist file as binary');
+    return obj[0];
+  } else {
+    throw new Error(`Binary file ${plist} appears to be empty`);
+  }
+}
+&nbsp;
+async function updatePlistFile (plist, updatedFields, binary = <span class="branch-0 cbranch-no" title="branch not covered" >true)</span> {
+  log.debug(`Attempting to update plist file'${plist}'`);
+  let obj;
+  try {
+    obj = await parsePlistFile(plist);
+  } catch (err) {
+<span class="cstat-no" title="statement not covered" >    log.errorAndThrow(`Could not update plist: ${err.message}`);</span>
+  }
+  _.extend(obj, updatedFields);
+  let newPlist = binary ? bplistCreate(obj) : <span class="branch-1 cbranch-no" title="branch not covered" >xmlplist.build(obj);</span>
+  try {
+    await fs.writeFile(plist, newPlist);
+  } catch (err) {
+<span class="cstat-no" title="statement not covered" >    log.errorAndThrow(`Could not save plist: ${err.message}`);</span>
+  }
+  log.debug(`Wrote plist file '${plist}'`);
+}
+&nbsp;
+export { parsePlistFile, updatePlistFile };
+&nbsp;</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Sep 11 2015 16:40:42 GMT-0700 (PDT)</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>
