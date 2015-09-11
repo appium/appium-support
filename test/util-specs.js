@@ -1,125 +1,136 @@
-"use strict";
 
-var util = require('..').util
-  , rimraf = require('rimraf')
-  , path = require('path')
-  , chaiAsPromised = require('chai-as-promised')
-  , chai = require('chai');
+import { util } from '../index.js';
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import B from 'bluebird';
+import sinon from 'sinon';
 
+let should = chai.should();
 chai.use(chaiAsPromised);
-var should = chai.should();
 
 describe('util', function () {
-  var nan = NaN
-    , none = null
-    , f = function () {
-    }
-    , o = {}
-    , n = 0
-    , s = "string"
-    , b = false
-    , e = "";
 
   describe("hasValue ", function () {
-    it("should work as expected", function () {
+    it("should exist", function () {
       should.exist(util.hasValue);
+    });
 
+    it('should handle undefined', function () {
       util.hasValue(undefined).should.be.false;
-      util.hasValue(nan).should.be.false;
-      util.hasValue(none).should.be.false;
-      util.hasValue(f).should.be.true;
-      util.hasValue(o).should.be.true;
-      util.hasValue(n).should.be.true;
-      util.hasValue(s).should.be.true;
-      util.hasValue(b).should.be.true;
+    });
+
+    it('should handle not a number', function () {
+      util.hasValue(NaN).should.be.false;
+    });
+
+    it('should handle null', function () {
+      util.hasValue(null).should.be.false;
+    });
+
+    it('should handle functions', function () {
+      util.hasValue(function () {}).should.be.true;
+    });
+
+    it('should handle empty arrays', function () {
+      util.hasValue({}).should.be.true;
+    });
+
+    it('should handle zero', function () {
+      util.hasValue(0).should.be.true;
+    });
+
+    it('should handle simple string', function () {
+      util.hasValue('string').should.be.true;
+    });
+
+    it('should handle booleans', function () {
+      util.hasValue(false).should.be.true;
+    });
+
+    it('should handle empty strings', function () {
+      util.hasValue('').should.be.true;
     });
   });
 
   describe("hasContent ", function () {
-    it("should work as expected", function () {
+    it('should exist', function () {
       should.exist(util.hasContent);
+    });
 
+    it('should handle undefined', function () {
       util.hasContent(undefined).should.be.false;
-      util.hasContent(nan).should.be.false;
-      util.hasContent(none).should.be.false;
-      util.hasContent(f).should.be.false;
-      util.hasContent(o).should.be.false;
-      util.hasContent(n).should.be.false;
-      util.hasContent(s).should.be.true;
-      util.hasContent(b).should.be.false;
-      util.hasContent(e).should.be.false;
+    });
+
+    it('should handle not a number', function () {
+      util.hasContent(NaN).should.be.false;
+    });
+
+    it('should handle null', function () {
+      util.hasContent(null).should.be.false;
+    });
+
+    it('should handle functions', function () {
+      util.hasContent(function () {}).should.be.false;
+    });
+
+    it('should handle empty arrays', function () {
+      util.hasContent({}).should.be.false;
+    });
+
+    it('should handle zero', function () {
+      util.hasContent(0).should.be.false;
+    });
+
+    it('should handle simple string', function () {
+      util.hasContent('string').should.be.true;
+    });
+
+    it('should handle booleans', function () {
+      util.hasContent(false).should.be.false;
+    });
+
+    it('should handle empty strings', function () {
+      util.hasContent('').should.be.false;
     });
   });
 
   describe("escapeSpace", function () {
-    it("should do nothign to a string without space", function () {
-      var actual = 'appium';
-      var expected = 'appium';
+    it("should do nothing to a string without space", function () {
+      let actual = 'appium';
+      let expected = 'appium';
       util.escapeSpace(actual).should.equal(expected);
     });
 
     it("should do escape spaces", function () {
-      var actual = '/Applications/ Xcode 6.1.1.app/Contents/Developer';
-      var expected = '/Applications/\\ Xcode\\ 6.1.1.app/Contents/Developer';
+      let actual = '/Applications/ Xcode 6.1.1.app/Contents/Developer';
+      let expected = '/Applications/\\ Xcode\\ 6.1.1.app/Contents/Developer';
       util.escapeSpace(actual).should.equal(expected);
     });
 
     it("should escape consecutive spaces", function () {
-      var actual = 'appium   space';
-      var expected = 'appium\\ \\ \\ space';
+      let actual = 'appium   space';
+      let expected = 'appium\\ \\ \\ space';
       util.escapeSpace(actual).should.equal(expected);
-    });
-  });
-
-  describe("fileExists", function () {
-    it("should return true if file is readable", function () {
-      return util
-        .fileExists('/')
-        .then(function (bool) {
-          bool.should.be.true;
-        });
-    });
-
-    it("should return false if file does not exist", function () {
-      return util
-        .fileExists('chuckwudi')
-        .then(function (bool) {
-          bool.should.be.false;
-        });
     });
   });
 
   describe("localIp", function () {
     it("should find a local ip address", function () {
-      var ip = util.localIp();
-      ip.should.match(/\d*\.\d*\.\d*\.\d*/);
+      let utilMock = sinon.mock(util);
+      utilMock.expects('localIp').returns('10.35.4.175');
+      util.localIp();
+      utilMock.verify();
     });
   });
 
-  describe("mkdirp", function () {
-    var dirName = path.resolve(__dirname, "tmp");
-    it("should make a directory that doesn't exist", function (done) {
-      rimraf(dirName, function (err) {
-        if (err) return done(err);
-        util.mkdirp(dirName).then(function () {
-          util.fileExists(dirName).then(function (exists) {
-            exists.should.be.true;
-            done();
-          }).catch(done);
-        }).catch(done);
-      });
+  describe("cancellableDelay", function () {
+    it("should delay", async function () {
+      await util.cancellableDelay('10');
     });
-
-    it("should not complain if the dir already exists", function (done) {
-      util.fileExists(dirName).then(function (exists) {
-        exists.should.be.true;
-        util.mkdirp(dirName).then(done).catch(done);
-      }).catch(done);
-    });
-
-    it("should still throw an error if something else goes wrong", function (done) {
-      util.mkdirp("/bin/foo").should.eventually.be.rejectedWith('EACCES')
-                             .then(done).catch(done);
+    it("cancel should work", async function () {
+      let delay = util.cancellableDelay('1000');
+      B.delay(10).then(function() { delay.cancel(); }).done();
+      await delay.should.be.rejectedWith(/cancellation error/);
     });
   });
 });
