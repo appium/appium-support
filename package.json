@@ -23,7 +23,7 @@
     "lib": "lib"
   },
   "dependencies": {
-    "MD5": "^1.3.0",
+    "md5": "^2.0.0",
     "appium-logger": "^1.0.0",
     "babel-runtime": "=5.5.5",
     "bluebird": "^2.9.25",
