@@ -12,40 +12,40 @@ Also note that `fs.mkdir` doesn't throw an error if the directory already exists
 
 ###Methods
 
-system.isWindows
-system.isMac
-system.isLinux
-system.isOSWin64
-system.arch
+- system.isWindows
+- system.isMac
+- system.isLinux
+- system.isOSWin64
+- system.arch
 
-util.hasContent - returns true if input string has content
-util.hasValue - returns true if input value is not undefined and no null
-util.escapeSpace
-util.escapeSpecialChars
-util.localIp
-util.cancellableDelay
-util.multiResolve - multiple path.resolve
+- util.hasContent - returns true if input string has content
+- util.hasValue - returns true if input value is not undefined and no null
+- util.escapeSpace
+- util.escapeSpecialChars
+- util.localIp
+- util.cancellableDelay
+- util.multiResolve - multiple path.resolve
 
-*fs.hasAccess* - use this over `fs.access`
-*fs.exists* - calls `fs.hasAccess`
-*fs.rimraf*
-*fs.mkdir* - doesn't throw an error if directory already exists
-*fs.copyFile*
-fs.open
-fs.close
-fs.access
-fs.readFile
-fs.writeFile
-fs.write
-fs.readlink
-fs.chmod
-fs.unlink
-fs.readdir
-fs.stat
-fs.rename
-*fs.md5*
+- *fs.hasAccess* - use this over `fs.access`
+- *fs.exists* - calls `fs.hasAccess`
+- *fs.rimraf*
+- *fs.mkdir* - doesn't throw an error if directory already exists
+- *fs.copyFile*
+- fs.open
+- fs.close
+- fs.access
+- fs.readFile
+- fs.writeFile
+- fs.write
+- fs.readlink
+- fs.chmod
+- fs.unlink
+- fs.readdir
+- fs.stat
+- fs.rename
+- *fs.md5*
 
-plist.parsePlistFile
-plist.updatePlistFile
+- plist.parsePlistFile
+- plist.updatePlistFile
 
-mkdirp
+- mkdirp
