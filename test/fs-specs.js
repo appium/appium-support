@@ -19,6 +19,8 @@ describe('fs', function () {
     should.exist(fs.rimraf);
     should.exist(fs.readFile);
     should.exist(fs.writeFile);
+    should.exist(fs.lstat);
+    should.exist(fs.mv);
    });
 
    describe("mkdir", function () {
