@@ -1,7 +1,8 @@
-
 import { fs } from '../index.js';
 import chai from 'chai';
 import path from 'path';
+import { exec } from 'teen_process';
+
 
 let should = chai.should();
 
@@ -80,5 +81,16 @@ describe('fs', function () {
     let existingPath = path.resolve(__dirname, 'fs-specs.js');
     let stat = await fs.stat(existingPath);
     stat.should.have.property('atime');
+  });
+  it('which', async () => {
+    let systemNpmPath = (await exec('which', ['npm'])).stdout.trim();
+    let npmPath = await fs.which('npm');
+    npmPath.should.equal(systemNpmPath);
+  });
+  it('glob', async () => {
+    let glob = 'test/*-specs.js';
+    let tests = await fs.glob(glob);
+    tests.should.be.an('array');
+    tests.should.have.length.above(2);
   });
 });
