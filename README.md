@@ -17,6 +17,7 @@ Also note that `fs.mkdir` doesn't throw an error if the directory already exists
 - system.isLinux
 - system.isOSWin64
 - system.arch
+- system.macOsxVersion
 
 - util.hasContent - returns true if input string has content
 - util.hasValue - returns true if input value is not undefined and no null
