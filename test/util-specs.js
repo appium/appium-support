@@ -1,5 +1,5 @@
 
-import { util } from '../index.js';
+import { util } from '..';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
@@ -9,9 +9,8 @@ let should = chai.should();
 chai.use(chaiAsPromised);
 
 describe('util', function () {
-
-  describe("hasValue ", function () {
-    it("should exist", function () {
+  describe('hasValue', function () {
+    it('should exist', function () {
       should.exist(util.hasValue);
     });
 
@@ -52,7 +51,7 @@ describe('util', function () {
     });
   });
 
-  describe("hasContent ", function () {
+  describe('hasContent', function () {
     it('should exist', function () {
       should.exist(util.hasContent);
     });
@@ -94,28 +93,28 @@ describe('util', function () {
     });
   });
 
-  describe("escapeSpace", function () {
-    it("should do nothing to a string without space", function () {
+  describe('escapeSpace', function () {
+    it('should do nothing to a string without space', function () {
       let actual = 'appium';
       let expected = 'appium';
       util.escapeSpace(actual).should.equal(expected);
     });
 
-    it("should do escape spaces", function () {
+    it('should do escape spaces', function () {
       let actual = '/Applications/ Xcode 6.1.1.app/Contents/Developer';
       let expected = '/Applications/\\ Xcode\\ 6.1.1.app/Contents/Developer';
       util.escapeSpace(actual).should.equal(expected);
     });
 
-    it("should escape consecutive spaces", function () {
+    it('should escape consecutive spaces', function () {
       let actual = 'appium   space';
       let expected = 'appium\\ \\ \\ space';
       util.escapeSpace(actual).should.equal(expected);
     });
   });
 
-  describe("localIp", function () {
-    it("should find a local ip address", function () {
+  describe('localIp', function () {
+    it('should find a local ip address', function () {
       let utilMock = sinon.mock(util);
       utilMock.expects('localIp').returns('10.35.4.175');
       util.localIp();
@@ -123,14 +122,33 @@ describe('util', function () {
     });
   });
 
-  describe("cancellableDelay", function () {
-    it("should delay", async function () {
+  describe('cancellableDelay', function () {
+    it('should delay', async function () {
       await util.cancellableDelay('10');
     });
-    it("cancel should work", async function () {
+    it('cancel should work', async function () {
       let delay = util.cancellableDelay('1000');
       B.delay(10).then(function() { delay.cancel(); }).done();
       await delay.should.be.rejectedWith(/cancellation error/);
+    });
+  });
+
+  describe('safeJson', () => {
+    it('should pass object through', () => {
+      let obj = {a: 'a', b: 'b'};
+      util.safeJson(obj).should.equal(obj);
+    });
+    it('should correctly parse json string', () => {
+      let obj = {a: 'a', b: 'b'};
+      util.safeJson(JSON.stringify(obj)).should.eql(obj);
+    });
+    it('should pass a number through', () => {
+      let num = 42;
+      util.safeJson(num).should.eql(num);
+    });
+    it('should make a number from a string representation', () => {
+      let num = 42;
+      util.safeJson(String(num)).should.eql(num);
     });
   });
 });
