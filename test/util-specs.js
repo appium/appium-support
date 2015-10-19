@@ -133,22 +133,22 @@ describe('util', function () {
     });
   });
 
-  describe('safeJson', () => {
+  describe('safeJsonParse', () => {
     it('should pass object through', () => {
       let obj = {a: 'a', b: 'b'};
-      util.safeJson(obj).should.equal(obj);
+      util.safeJsonParse(obj).should.equal(obj);
     });
     it('should correctly parse json string', () => {
       let obj = {a: 'a', b: 'b'};
-      util.safeJson(JSON.stringify(obj)).should.eql(obj);
+      util.safeJsonParse(JSON.stringify(obj)).should.eql(obj);
     });
     it('should pass a number through', () => {
       let num = 42;
-      util.safeJson(num).should.eql(num);
+      util.safeJsonParse(num).should.eql(num);
     });
     it('should make a number from a string representation', () => {
       let num = 42;
-      util.safeJson(String(num)).should.eql(num);
+      util.safeJsonParse(String(num)).should.eql(num);
     });
   });
 });
