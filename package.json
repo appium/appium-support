@@ -36,7 +36,6 @@
     "ncp": "^2.0.0",
     "plist": "^1.1.0",
     "rimraf": "^2.4.1",
-    "source-map-support": "^0.3.1",
     "teen_process": "^1.0.0",
     "which": "^1.2.0"
   },
