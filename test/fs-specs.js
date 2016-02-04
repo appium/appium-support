@@ -82,10 +82,16 @@ describe('fs', function () {
     let stat = await fs.stat(existingPath);
     stat.should.have.property('atime');
   });
-  it('which', async () => {
-    let systemNpmPath = (await exec('which', ['npm'])).stdout.trim();
-    let npmPath = await fs.which('npm');
-    npmPath.should.equal(systemNpmPath);
+  describe('which', () => {
+    it('should find correct executable', async () => {
+      let systemNpmPath = (await exec('which', ['npm'])).stdout.trim();
+      let npmPath = await fs.which('npm');
+      npmPath.should.equal(systemNpmPath);
+    });
+    it('should fail gracefully', async () => {
+      await fs.which('something_that_does_not_exist')
+        .should.eventually.be.rejected;
+    });
   });
   it('glob', async () => {
     let glob = 'test/*-specs.js';

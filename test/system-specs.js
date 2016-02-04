@@ -64,7 +64,7 @@ describe('system', () => {
     beforeEach(() => {
       sandbox = sinon.sandbox.create();
       mocks[SANDBOX] = sandbox;
-      for (let [key, value] of _.pairs(libs)) {
+      for (let [key, value] of _.toPairs(libs)) {
         mocks[key] = sandbox.mock(value);
       }
     });

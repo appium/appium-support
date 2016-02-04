@@ -28,16 +28,16 @@
     "bluebird": "^2.9.25",
     "bplist-creator": "^0.0.6",
     "bplist-parser": "^0.1.0",
-    "glob": "^5.0.15",
-    "lodash": "^3.10.0",
+    "glob": "^6.0.4",
+    "lodash": "^4.2.1",
     "md5": "^2.0.0",
     "mkdirp": "^0.5.1",
-    "mv": "^2.0.0",
+    "mv": "^2.1.1",
     "ncp": "^2.0.0",
-    "plist": "^1.1.0",
-    "rimraf": "^2.4.1",
-    "teen_process": "^1.0.0",
-    "which": "^1.2.0"
+    "plist": "^1.2.0",
+    "rimraf": "^2.5.1",
+    "teen_process": "^1.5.1",
+    "which": "^1.2.4"
   },
   "scripts": {
     "prepublish": "./node_modules/.bin/gulp prepublish",
