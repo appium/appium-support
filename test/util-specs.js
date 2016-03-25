@@ -4,6 +4,8 @@ import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
 import sinon from 'sinon';
+import os from 'os';
+
 
 let should = chai.should();
 chai.use(chaiAsPromised);
@@ -113,12 +115,53 @@ describe('util', function () {
     });
   });
 
-  describe('localIp', function () {
+  describe.only('localIp', function () {
     it('should find a local ip address', function () {
-      let utilMock = sinon.mock(util);
-      utilMock.expects('localIp').returns('10.35.4.175');
-      util.localIp();
-      utilMock.verify();
+      let ifConfigOut = {
+        lo0:
+         [ { address: '::1',
+             netmask: 'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
+             family: 'IPv6',
+             mac: '00:00:00:00:00:00',
+             scopeid: 0,
+             internal: true },
+           { address: '127.0.0.1',
+             netmask: '255.0.0.0',
+             family: 'IPv4',
+             mac: '00:00:00:00:00:00',
+             internal: true },
+           { address: 'fe80::1',
+             netmask: 'ffff:ffff:ffff:ffff::',
+             family: 'IPv6',
+             mac: '00:00:00:00:00:00',
+             scopeid: 1,
+             internal: true } ],
+        en0:
+         [ { address: 'xxx',
+             netmask: 'ffff:ffff:ffff:ffff::',
+             family: 'IPv6',
+             mac: 'd0:e1:40:93:56:9a',
+             scopeid: 4,
+             internal: false },
+           { address: '123.123.123.123',
+             netmask: '255.255.254.0',
+             family: 'IPv4',
+             mac: 'xxx',
+             internal: false } ],
+        awdl0:
+         [ { address: 'xxx',
+             netmask: 'ffff:ffff:ffff:ffff::',
+             family: 'IPv6',
+             mac: 'xxx',
+             scopeid: 7,
+             internal: false } ]
+      };
+      let osMock = sinon.mock(os);
+      osMock.expects('networkInterfaces').returns(ifConfigOut);
+      ifConfigOut = '';
+      let ip = util.localIp();
+      ip.should.eql('123.123.123.123');
+      osMock.verify();
     });
   });
 
