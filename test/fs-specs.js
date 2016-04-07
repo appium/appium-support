@@ -1,4 +1,4 @@
-import { fs } from '../index.js';
+import { fs, tempDir } from '../index.js';
 import chai from 'chai';
 import path from 'path';
 import { exec } from 'teen_process';
@@ -73,9 +73,35 @@ describe('fs', function () {
     await fs.rimraf(newPath);
     (await fs.exists(newPath)).should.be.false;
   });
-  it('md5', async () => {
-    let existingPath = path.resolve(__dirname, 'fs-specs.js');
-    (await fs.md5(existingPath)).should.have.length(32);
+  describe('md5', function () {
+    this.timeout(120000);
+    let smallFilePath;
+    let bigFilePath;
+    before(async () => {
+      // get the path of a small file (this source file)
+      smallFilePath = path.resolve(__dirname, 'fs-specs.js');
+
+      // create a large file to test, about 163840000 bytes
+      bigFilePath = path.resolve(await tempDir.openDir(), 'enormous.txt');
+      let file = await fs.open(bigFilePath, 'w');
+      let fileData = '';
+      for (let i = 0; i < (await fs.stat(bigFilePath)).blksize; i++) {
+        fileData += '1';
+      }
+      for (let i = 0; i < 40000; i++) {
+        await fs.write(file, fileData);
+      }
+      await fs.close(file);
+    });
+    after(async () => {
+      await fs.unlink(bigFilePath);
+    });
+    it('should calculate hash of correct length', async () => {
+      (await fs.md5(smallFilePath)).should.have.length(32);
+    });
+    it('should be able to run on huge file', async () => {
+      (await fs.md5(bigFilePath)).should.have.length(32);
+    });
   });
   it('stat', async () => {
     let existingPath = path.resolve(__dirname, 'fs-specs.js');

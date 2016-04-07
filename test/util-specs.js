@@ -115,7 +115,7 @@ describe('util', function () {
     });
   });
 
-  describe.only('localIp', function () {
+  describe('localIp', function () {
     it('should find a local ip address', function () {
       let ifConfigOut = {
         lo0:
