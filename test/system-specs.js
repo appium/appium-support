@@ -53,6 +53,11 @@ describe('system', () => {
       await system.macOsxVersion().should.eventually.equal('10.10');
     });
 
+    it('should return correct version for 10.12', async () => {
+      tpMock.expects('exec').once().withExactArgs('sw_vers', ['-productVersion']).returns({stdout: '10.12.0'});
+      await system.macOsxVersion().should.eventually.equal('10.12');
+    });
+
     it("should throw an error if OSX version can't be determined", async () => {
       let invalidOsx = '99.99.99';
       tpMock.expects('exec').once().withExactArgs('sw_vers', ['-productVersion']).returns({stdout: invalidOsx});
