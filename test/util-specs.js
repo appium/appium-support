@@ -194,4 +194,19 @@ describe('util', function () {
       util.safeJsonParse(String(num)).should.eql(num);
     });
   });
+
+  describe('unwrapElement', () => {
+    it('should pass through an unwrapped element', () => {
+      let el = 4;
+      util.unwrapElement(el).should.equal(el);
+    });
+    it('should pass through an element that is an object', () => {
+      let el = {RANDOM: 4};
+      util.unwrapElement(el).should.equal(el);
+    });
+    it('should unwrap a wrapped element', () => {
+      let el = {ELEMENT: 4};
+      util.unwrapElement(el).should.eql(4);
+    });
+  });
 });
