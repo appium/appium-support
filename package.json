@@ -34,8 +34,10 @@
     "mkdirp": "^0.5.1",
     "mv": "^2.1.1",
     "ncp": "^2.0.0",
+    "npmlog": "^4.0.2",
     "plist": "^1.2.0",
     "rimraf": "^2.5.1",
+    "source-map-support": "^0.4.6",
     "teen_process": "^1.5.1",
     "which": "^1.2.4"
   },
