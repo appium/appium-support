@@ -119,42 +119,42 @@ describe('util', function () {
     it('should find a local ip address', function () {
       let ifConfigOut = {
         lo0:
-         [ { address: '::1',
-             netmask: 'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
-             family: 'IPv6',
-             mac: '00:00:00:00:00:00',
-             scopeid: 0,
-             internal: true },
-           { address: '127.0.0.1',
-             netmask: '255.0.0.0',
-             family: 'IPv4',
-             mac: '00:00:00:00:00:00',
-             internal: true },
-           { address: 'fe80::1',
-             netmask: 'ffff:ffff:ffff:ffff::',
-             family: 'IPv6',
-             mac: '00:00:00:00:00:00',
-             scopeid: 1,
-             internal: true } ],
+         [{ address: '::1',
+            netmask: 'ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff',
+            family: 'IPv6',
+            mac: '00:00:00:00:00:00',
+            scopeid: 0,
+            internal: true },
+          { address: '127.0.0.1',
+            netmask: '255.0.0.0',
+            family: 'IPv4',
+            mac: '00:00:00:00:00:00',
+            internal: true },
+          { address: 'fe80::1',
+            netmask: 'ffff:ffff:ffff:ffff::',
+            family: 'IPv6',
+            mac: '00:00:00:00:00:00',
+            scopeid: 1,
+            internal: true }],
         en0:
-         [ { address: 'xxx',
-             netmask: 'ffff:ffff:ffff:ffff::',
-             family: 'IPv6',
-             mac: 'd0:e1:40:93:56:9a',
-             scopeid: 4,
-             internal: false },
-           { address: '123.123.123.123',
-             netmask: '255.255.254.0',
-             family: 'IPv4',
-             mac: 'xxx',
-             internal: false } ],
+         [{ address: 'xxx',
+            netmask: 'ffff:ffff:ffff:ffff::',
+            family: 'IPv6',
+            mac: 'd0:e1:40:93:56:9a',
+            scopeid: 4,
+            internal: false },
+          { address: '123.123.123.123',
+            netmask: '255.255.254.0',
+            family: 'IPv4',
+            mac: 'xxx',
+            internal: false }],
         awdl0:
-         [ { address: 'xxx',
-             netmask: 'ffff:ffff:ffff:ffff::',
-             family: 'IPv6',
-             mac: 'xxx',
-             scopeid: 7,
-             internal: false } ]
+         [{ address: 'xxx',
+            netmask: 'ffff:ffff:ffff:ffff::',
+            family: 'IPv6',
+            mac: 'xxx',
+            scopeid: 7,
+            internal: false }]
       };
       let osMock = sinon.mock(os);
       osMock.expects('networkInterfaces').returns(ifConfigOut);
@@ -171,7 +171,7 @@ describe('util', function () {
     });
     it('cancel should work', async function () {
       let delay = util.cancellableDelay('1000');
-      B.delay(10).then(function() { delay.cancel(); }).done();
+      B.delay(10).then(() => { delay.cancel(); }).done(); // eslint-disable-line
       await delay.should.be.rejectedWith(/cancellation error/);
     });
   });

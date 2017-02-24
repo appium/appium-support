@@ -22,30 +22,30 @@ describe('fs', function () {
     should.exist(fs.writeFile);
     should.exist(fs.lstat);
     should.exist(fs.mv);
-   });
+  });
 
-   describe("mkdir", function () {
-     let dirName = path.resolve(__dirname, "tmp");
+  describe("mkdir", function () {
+    let dirName = path.resolve(__dirname, "tmp");
 
-     it("should make a directory that doesn't exist", async function () {
-       await fs.rimraf(dirName);
-       await fs.mkdir(dirName);
-       let exists = await fs.hasAccess(dirName);
-       exists.should.be.true;
-     });
+    it("should make a directory that doesn't exist", async function () {
+      await fs.rimraf(dirName);
+      await fs.mkdir(dirName);
+      let exists = await fs.hasAccess(dirName);
+      exists.should.be.true;
+    });
 
-     it("should not complain if the dir already exists", async function () {
-         let exists = await fs.hasAccess(dirName);
-         exists.should.be.true;
-         await fs.mkdir(dirName);
-     });
+    it("should not complain if the dir already exists", async function () {
+      let exists = await fs.hasAccess(dirName);
+      exists.should.be.true;
+      await fs.mkdir(dirName);
+    });
 
-     it("should still throw an error if something else goes wrong", async function () {
-       await fs.mkdir("/bin/foo").should.be.rejected;
-     });
-   });
+    it("should still throw an error if something else goes wrong", async function () {
+      await fs.mkdir("/bin/foo").should.be.rejected;
+    });
+  });
 
-   it('hasAccess', async () => {
+  it('hasAccess', async () => {
     let existingPath = path.resolve(__dirname, 'fs-specs.js');
     (await fs.exists(existingPath)).should.be.ok;
     let nonExistingPath = path.resolve(__dirname, 'wrong-specs.js');
