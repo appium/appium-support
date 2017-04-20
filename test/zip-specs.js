@@ -1,7 +1,6 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import path from 'path';
-import B from 'bluebird';
 import { zip } from '..';
 import { tempDir, fs } from '../index';
 
@@ -25,11 +24,26 @@ describe('#zip', () => {
 
   describe('readEntries()', () => {
     it('should get a list of entries (directories and files) from zip file', async () => {
-      const expectedEntries = ['zip/', 'zip/test-dir/', 'zip/test-dir/a.txt', 'zip/test-dir/b.txt'];
+
+      // The name and contents of the expected entries in the zip file (if no contents, then it's a dir)
+      const expectedEntries = [
+        {name: 'zip/'}, 
+        {name: 'zip/test-dir/'},
+        {name: 'zip/test-dir/a.txt', contents: 'Hello World'}, 
+        {name: 'zip/test-dir/b.txt', contents: 'Foo Bar'},
+      ];
       let i = 0;
-      await zip.readEntries(zipFilepath, async ({entry}) => {
-        await B.delay(10); 
-        entry.fileName.should.equal(expectedEntries[i++]);
+      const tempPath = await tempDir.openDir();
+
+      await zip.readEntries(zipFilepath, async ({entry, extractEntryTo}) => {
+        entry.fileName.should.equal(expectedEntries[i].name);
+
+        // If it's a file, test that we can extract it to a temporary directory and that the contents are correct
+        if (expectedEntries[i].contents) {
+          await extractEntryTo(tempPath);
+          await fs.readFile(path.resolve(tempPath, entry.fileName), {flags: 'r', encoding: 'utf8'}).should.eventually.equal(expectedEntries[i].contents); 
+        }
+        i++;
       });
     });
   });
