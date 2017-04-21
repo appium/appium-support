@@ -3,6 +3,9 @@ import chaiAsPromised from 'chai-as-promised';
 import path from 'path';
 import { zip } from '..';
 import { tempDir, fs } from '../index';
+import nodeFS from 'fs';
+import sinon from 'sinon';
+import { MockReadWriteStream } from './helpers';
 
 chai.use(chaiAsPromised);
 
@@ -23,18 +26,21 @@ describe('#zip', () => {
   });
 
   describe('readEntries()', () => {
-    it('should get a list of entries (directories and files) from zip file', async () => {
+    let expectedEntries, tempPath;
 
+    beforeEach(async () => {
       // The name and contents of the expected entries in the zip file (if no contents, then it's a dir)
-      const expectedEntries = [
+      expectedEntries = [
         {name: 'unzipped/'}, 
         {name: 'unzipped/test-dir/'},
         {name: 'unzipped/test-dir/a.txt', contents: 'Hello World'}, 
         {name: 'unzipped/test-dir/b.txt', contents: 'Foo Bar'},
       ];
-      let i = 0;
-      const tempPath = await tempDir.openDir();
+      tempPath = await tempDir.openDir();
+    });
 
+    it('should get a list of entries (directories and files) from zip file', async () => {
+      let i = 0;
       await zip.readEntries(zippedFilepath, async ({entry, extractEntryTo}) => {
         entry.fileName.should.equal(expectedEntries[i].name);
 
@@ -45,6 +51,11 @@ describe('#zip', () => {
         }
         i++;
       });
+    });
+
+    it('should be rejected if it uses a non-zip file', async () => {
+      let promise = zip.readEntries(path.resolve('test', 'assets', 'unzipped', 'test-dir', 'a.txt'), async () => {});
+      await promise.should.eventually.be.rejectedWith(/signature not found/);
     });
   });
 
@@ -64,5 +75,32 @@ describe('#zip', () => {
       await fs.readFile(path.resolve(tempPath, 'output', 'test-dir', 'a.txt'), {encoding: 'utf8'}).should.eventually.equal('Hello World');
       await fs.readFile(path.resolve(tempPath, 'output', 'test-dir', 'b.txt'), {encoding: 'utf8'}).should.eventually.equal('Foo Bar');
     });
+
+    it('should be rejected if createWriteStream emits an error', async () => {
+      const mockStream = new MockReadWriteStream();
+      mockStream.end = () => mockStream.emit('error', new Error('write stream error'));
+      const writeStreamStub = sinon.stub(nodeFS, 'createWriteStream', () => mockStream);
+      await zip.toInMemoryZip(path.resolve('test', 'assets', 'unzipped')).should.be.rejectedWith(/write stream error/);
+      writeStreamStub.restore();
+    });
   });
+
+  describe('_extractEntryTo()', () => {
+    let entry, mockZipFile, mockZipStream;
+    beforeEach(async () => {
+      entry = {fileName: path.resolve(await tempDir.openDir(), 'temp', 'file')};
+      mockZipStream = new MockReadWriteStream();
+      mockZipFile = {
+        openReadStream: (entry, cb) => cb(null, mockZipStream),
+      };
+    });
+
+    it('should be rejected if zip stream emits an error', async () => {
+      mockZipStream.pipe = () => { 
+        mockZipStream.emit('error', new Error('zip stream error')); 
+      };
+      zip._extractEntryTo(mockZipFile, entry).should.be.rejectedWith('zip stream error');
+    });
+  });
+
 });
