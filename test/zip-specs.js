@@ -99,7 +99,16 @@ describe('#zip', () => {
       mockZipStream.pipe = () => { 
         mockZipStream.emit('error', new Error('zip stream error')); 
       };
-      zip._extractEntryTo(mockZipFile, entry).should.be.rejectedWith('zip stream error');
+      await zip._extractEntryTo(mockZipFile, entry).should.be.rejectedWith('zip stream error');
+    });
+
+    it('should be rejected if write stream emits an error', async () => {
+      mockZipStream.pipe = (writeStream) => {
+        writeStream.emit('error', new Error('write stream error'));
+        mockZipStream.end();
+        writeStream.end();
+      };
+      await zip._extractEntryTo(mockZipFile, entry).should.be.rejectedWith('write stream error');
     });
   });
 
