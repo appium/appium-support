@@ -7,18 +7,18 @@ import { tempDir, fs } from '../index';
 chai.use(chaiAsPromised);
 
 describe('#zip', () => {
-  let zipFilepath;
+  let zippedFilepath;
 
   beforeEach(() => {
-    zipFilepath = path.resolve('test', 'assets', 'zip.zip');
+    zippedFilepath = path.resolve('test', 'assets', 'zip.zip');
   });
 
   describe('extractAllTo()', () => {
     it('should extract contents of a .zip file to a directory', async () => {
       const tempPath = await tempDir.openDir();
-      await zip.extractAllTo(zipFilepath, tempPath);
-      await fs.readFile(path.resolve(tempPath, 'zip', 'test-dir', 'a.txt'), {encoding: 'utf8'}).should.eventually.equal('Hello World');
-      await fs.readFile(path.resolve(tempPath, 'zip', 'test-dir', 'b.txt'), {encoding: 'utf8'}).should.eventually.equal('Foo Bar');
+      await zip.extractAllTo(zippedFilepath, tempPath);
+      await fs.readFile(path.resolve(tempPath, 'unzipped', 'test-dir', 'a.txt'), {encoding: 'utf8'}).should.eventually.equal('Hello World');
+      await fs.readFile(path.resolve(tempPath, 'unzipped', 'test-dir', 'b.txt'), {encoding: 'utf8'}).should.eventually.equal('Foo Bar');
     });
   });
 
@@ -27,15 +27,15 @@ describe('#zip', () => {
 
       // The name and contents of the expected entries in the zip file (if no contents, then it's a dir)
       const expectedEntries = [
-        {name: 'zip/'}, 
-        {name: 'zip/test-dir/'},
-        {name: 'zip/test-dir/a.txt', contents: 'Hello World'}, 
-        {name: 'zip/test-dir/b.txt', contents: 'Foo Bar'},
+        {name: 'unzipped/'}, 
+        {name: 'unzipped/test-dir/'},
+        {name: 'unzipped/test-dir/a.txt', contents: 'Hello World'}, 
+        {name: 'unzipped/test-dir/b.txt', contents: 'Foo Bar'},
       ];
       let i = 0;
       const tempPath = await tempDir.openDir();
 
-      await zip.readEntries(zipFilepath, async ({entry, extractEntryTo}) => {
+      await zip.readEntries(zippedFilepath, async ({entry, extractEntryTo}) => {
         entry.fileName.should.equal(expectedEntries[i].name);
 
         // If it's a file, test that we can extract it to a temporary directory and that the contents are correct
@@ -51,7 +51,7 @@ describe('#zip', () => {
   describe('toInMemoryZip()', () => {
     it('should convert a local file to an in-memory zip buffer', async () => {
       // Convert directory to in-memory buffer
-      const testFolder = path.resolve('test', 'assets', 'zip');
+      const testFolder = path.resolve('test', 'assets', 'unzipped');
       const buffer = await zip.toInMemoryZip(testFolder);
       Buffer.isBuffer(buffer).should.be.true;
 
