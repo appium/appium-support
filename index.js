@@ -7,8 +7,9 @@ import * as plist from './lib/plist';
 import { mkdirp } from './lib/mkdirp';
 import * as logger from './lib/logging';
 import * as process from './lib/process';
+import * as zip from './lib/zip';
 
 // can't add to other exports `as default`
 // until JSHint figures out how to parse that pattern
 export default { tempDir, system, util, fs, cancellableDelay, plist, mkdirp,
-                 logger, process };
+                 logger, process, zip };
