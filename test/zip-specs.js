@@ -1,10 +1,8 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import path from 'path';
-import { zip } from '..';
+import * as zip from '../lib/zip';
 import { tempDir, fs } from '../index';
-import nodeFS from 'fs';
-import sinon from 'sinon';
 import { MockReadWriteStream } from './helpers';
 
 chai.use(chaiAsPromised);
@@ -77,11 +75,7 @@ describe('#zip', () => {
     });
 
     it('should be rejected if createWriteStream emits an error', async () => {
-      const mockStream = new MockReadWriteStream();
-      mockStream.end = () => mockStream.emit('error', new Error('write stream error'));
-      const writeStreamStub = sinon.stub(nodeFS, 'createWriteStream', () => mockStream);
-      await zip.toInMemoryZip(path.resolve('test', 'assets', 'unzipped')).should.be.rejectedWith(/write stream error/);
-      writeStreamStub.restore();
+      await zip.toInMemoryZip(path.resolve('test', 'assets', 'bad_path')).should.be.rejectedWith(/directory:/);
     });
 
     it('should be rejected if there is no access to the directory', async () => {
