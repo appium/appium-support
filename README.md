@@ -26,6 +26,8 @@ Also note that `fs.mkdir` doesn't throw an error if the directory already exists
 - util.localIp
 - util.cancellableDelay
 - util.multiResolve - multiple path.resolve
+- util.safeJsonParse
+- util.unwrapElement
 
 - *fs.hasAccess* - use this over `fs.access`
 - *fs.exists* - calls `fs.hasAccess`
@@ -38,17 +40,23 @@ Also note that `fs.mkdir` doesn't throw an error if the directory already exists
 - fs.readFile
 - fs.writeFile
 - fs.write
+- fs.read
 - fs.readlink
 - fs.chmod
 - fs.unlink
 - fs.readdir
 - fs.stat
 - fs.rename
+- fs.lstat
 - *fs.md5*
+- fs.which
+- fs.glob
+- fs.mv
 
 - plist.parsePlistFile
 - plist.updatePlistFile
 
+- cancellableDelay
 - mkdirp
 
 - logger
