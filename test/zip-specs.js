@@ -52,7 +52,7 @@ describe('#zip', () => {
       {name: 'unzipped/test-dir/b.txt', contents: 'Foo Bar'},
     ]; 
 
-    it('should get a list of entries (directories and files) from zip file', async () => {
+    it('should iterate entries (directories and files) of zip file', async () => {
       let i = 0;
       await zip.readEntries(zippedFilepath, async ({entry, extractEntryTo}) => {
         entry.fileName.should.equal(expectedEntries[i].name);
@@ -64,6 +64,15 @@ describe('#zip', () => {
         }
         i++;
       });
+    });
+
+    it('should stop iterating zipFile if onEntry callback returns false', async () => {
+      let i = 0;
+      await zip.readEntries(zippedFilepath, async () => {
+        i++;
+        return false;
+      });
+      i.should.equal(1);
     });
 
     it('should be rejected if it uses a non-zip file', async () => {
