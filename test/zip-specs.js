@@ -31,9 +31,9 @@ describe('#zip', () => {
     beforeEach(async () => {
       // The name and contents of the expected entries in the zip file (if no contents, then it's a dir)
       expectedEntries = [
-        {name: 'unzipped/'}, 
+        {name: 'unzipped/'},
         {name: 'unzipped/test-dir/'},
-        {name: 'unzipped/test-dir/a.txt', contents: 'Hello World'}, 
+        {name: 'unzipped/test-dir/a.txt', contents: 'Hello World'},
         {name: 'unzipped/test-dir/b.txt', contents: 'Foo Bar'},
       ];
       tempPath = await tempDir.openDir();
@@ -47,7 +47,7 @@ describe('#zip', () => {
         // If it's a file, test that we can extract it to a temporary directory and that the contents are correct
         if (expectedEntries[i].contents) {
           await extractEntryTo(tempPath);
-          await fs.readFile(path.resolve(tempPath, entry.fileName), {flags: 'r', encoding: 'utf8'}).should.eventually.equal(expectedEntries[i].contents); 
+          await fs.readFile(path.resolve(tempPath, entry.fileName), {flags: 'r', encoding: 'utf8'}).should.eventually.equal(expectedEntries[i].contents);
         }
         i++;
       });
@@ -83,6 +83,13 @@ describe('#zip', () => {
       await zip.toInMemoryZip(path.resolve('test', 'assets', 'unzipped')).should.be.rejectedWith(/write stream error/);
       writeStreamStub.restore();
     });
+
+    it('should be rejected if there is no access to the directory', async () => {
+      let fsStub = sinon.stub(fs, 'hasAccess').returns(false);
+      await zip.toInMemoryZip('/path/to/some/directory')
+        .should.be.rejectedWith(/Unable to access directory/);
+      fsStub.restore();
+    });
   });
 
   describe('_extractEntryTo()', () => {
@@ -91,13 +98,13 @@ describe('#zip', () => {
       entry = {fileName: path.resolve(await tempDir.openDir(), 'temp', 'file')};
       mockZipStream = new MockReadWriteStream();
       mockZipFile = {
-        openReadStream: (entry, cb) => cb(null, mockZipStream),
+        openReadStream: (entry, cb) => cb(null, mockZipStream), // eslint-disable-line promise/prefer-await-to-callbacks
       };
     });
 
     it('should be rejected if zip stream emits an error', async () => {
-      mockZipStream.pipe = () => { 
-        mockZipStream.emit('error', new Error('zip stream error')); 
+      mockZipStream.pipe = () => {
+        mockZipStream.emit('error', new Error('zip stream error'));
       };
       await zip._extractEntryTo(mockZipFile, entry).should.be.rejectedWith('zip stream error');
     });
