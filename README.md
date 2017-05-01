@@ -1,5 +1,5 @@
 [![Coverage Status](https://coveralls.io/repos/appium/appium-support/badge.svg?branch=master&service=github)](https://coveralls.io/github/appium/appium-support?branch=master)
-#appium-support
+# appium-support
 
 Utility functions used to support libs used across appium packages.
 
@@ -10,7 +10,7 @@ Appium, as of version 1.5 is all based on promises, so this module provides prom
 Most notably, we wrap `fs` for file system commands. Note the addition of `hasAccess`.
 Also note that `fs.mkdir` doesn't throw an error if the directory already exists, it will just resolve.
 
-###Methods
+### Methods
 
 - system.isWindows
 - system.isMac
@@ -52,6 +52,10 @@ Also note that `fs.mkdir` doesn't throw an error if the directory already exists
 - mkdirp
 
 - logger
+
+- zip.extractAllTo - Extracts contents of a zipfile to a directory
+- zip.readEntries - Reads entries (files and directories) of a zipfile
+- zip.toInMemoryZip - Converts a directory into a base64 zipfile
 
 
 ## logger

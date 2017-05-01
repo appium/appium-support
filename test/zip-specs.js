@@ -1,60 +1,83 @@
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import path from 'path';
-import { zip } from '..';
+import mockFS from 'mock-fs';
+import * as zip from '../lib/zip';
 import { tempDir, fs } from '../index';
-import nodeFS from 'fs';
-import sinon from 'sinon';
 import { MockReadWriteStream } from './helpers';
+import sinon from 'sinon';
 
 chai.use(chaiAsPromised);
 
 describe('#zip', () => {
-  let zippedFilepath;
+  let zippedFilepath, assetsPath;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    assetsPath = 'path/to/assets';
     zippedFilepath = path.resolve('test', 'assets', 'zip.zip');
+
+    // Mock the filesystem to use in-memory
+    mockFS({
+      [assetsPath]: {
+        'NotAZipFile.zip': '12345',
+        'unzipped': {
+          'a.txt': 'Hello World',
+          'b.txt': 'Foo Bar',
+        },
+      },
+    });
+
+    // Hardcoded base64 zip
+    const zippedBase64 = 'UEsDBAoAAAAAALlzk0oAAAAAAAAAAAAAAAAJABAAdW56aXBwZWQvVVgMANBO+VjO1vdY9QEUAFBLAwQKAAAAAADAc5NKAAAAAAAAAAAAAAAAEgAQAHVuemlwcGVkL3Rlc3QtZGlyL1VYDADQTvlY19b3WPUBFABQSwMEFAAIAAgAwnOTSgAAAAAAAAAAAAAAABcAEAB1bnppcHBlZC90ZXN0LWRpci9hLnR4dFVYDACDTvlY3Nb3WPUBFADzSM3JyVcIzy/KSQEAUEsHCFaxF0oNAAAACwAAAFBLAwQUAAgACADEc5NKAAAAAAAAAAAAAAAAFwAQAHVuemlwcGVkL3Rlc3QtZGlyL2IudHh0VVgMAINO+Vjf1vdY9QEUAHPLz1dwSiwCAFBLBwhIfrZJCQAAAAcAAABQSwECFQMKAAAAAAC5c5NKAAAAAAAAAAAAAAAACQAMAAAAAAAAAABA7UEAAAAAdW56aXBwZWQvVVgIANBO+VjO1vdYUEsBAhUDCgAAAAAAwHOTSgAAAAAAAAAAAAAAABIADAAAAAAAAAAAQO1BNwAAAHVuemlwcGVkL3Rlc3QtZGlyL1VYCADQTvlY19b3WFBLAQIVAxQACAAIAMJzk0pWsRdKDQAAAAsAAAAXAAwAAAAAAAAAAECkgXcAAAB1bnppcHBlZC90ZXN0LWRpci9hLnR4dFVYCACDTvlY3Nb3WFBLAQIVAxQACAAIAMRzk0pIfrZJCQAAAAcAAAAXAAwAAAAAAAAAAECkgdkAAAB1bnppcHBlZC90ZXN0LWRpci9iLnR4dFVYCACDTvlY39b3WFBLBQYAAAAABAAEADEBAAA3AQAAAAA=';
+    zippedFilepath = path.resolve(assetsPath, 'zipped.zip');
+    await fs.writeFile(zippedFilepath, zippedBase64, 'base64');
+  });
+
+  afterEach(() => {
+    mockFS.restore();
   });
 
   describe('extractAllTo()', () => {
     it('should extract contents of a .zip file to a directory', async () => {
-      const tempPath = await tempDir.openDir();
-      await zip.extractAllTo(zippedFilepath, tempPath);
-      await fs.readFile(path.resolve(tempPath, 'unzipped', 'test-dir', 'a.txt'), {encoding: 'utf8'}).should.eventually.equal('Hello World');
-      await fs.readFile(path.resolve(tempPath, 'unzipped', 'test-dir', 'b.txt'), {encoding: 'utf8'}).should.eventually.equal('Foo Bar');
+      await zip.extractAllTo(zippedFilepath, path.resolve(assetsPath));
+      await fs.readFile(path.resolve(assetsPath, 'unzipped', 'test-dir', 'a.txt'), {encoding: 'utf8'}).should.eventually.equal('Hello World');
+      await fs.readFile(path.resolve(assetsPath, 'unzipped', 'test-dir', 'b.txt'), {encoding: 'utf8'}).should.eventually.equal('Foo Bar');
     });
   });
 
   describe('readEntries()', () => {
-    let expectedEntries, tempPath;
+    const expectedEntries = [
+      {name: 'unzipped/'}, 
+      {name: 'unzipped/test-dir/'},
+      {name: 'unzipped/test-dir/a.txt', contents: 'Hello World'}, 
+      {name: 'unzipped/test-dir/b.txt', contents: 'Foo Bar'},
+    ]; 
 
-    beforeEach(async () => {
-      // The name and contents of the expected entries in the zip file (if no contents, then it's a dir)
-      expectedEntries = [
-        {name: 'unzipped/'},
-        {name: 'unzipped/test-dir/'},
-        {name: 'unzipped/test-dir/a.txt', contents: 'Hello World'},
-        {name: 'unzipped/test-dir/b.txt', contents: 'Foo Bar'},
-      ];
-      tempPath = await tempDir.openDir();
-    });
-
-    it('should get a list of entries (directories and files) from zip file', async () => {
+    it('should iterate entries (directories and files) of zip file', async () => {
       let i = 0;
       await zip.readEntries(zippedFilepath, async ({entry, extractEntryTo}) => {
         entry.fileName.should.equal(expectedEntries[i].name);
 
         // If it's a file, test that we can extract it to a temporary directory and that the contents are correct
         if (expectedEntries[i].contents) {
-          await extractEntryTo(tempPath);
-          await fs.readFile(path.resolve(tempPath, entry.fileName), {flags: 'r', encoding: 'utf8'}).should.eventually.equal(expectedEntries[i].contents);
+          await extractEntryTo(assetsPath);
+          await fs.readFile(path.resolve(assetsPath, entry.fileName), {flags: 'r', encoding: 'utf8'}).should.eventually.equal(expectedEntries[i].contents); 
         }
         i++;
       });
     });
 
+    it('should stop iterating zipFile if onEntry callback returns false', async () => {
+      let i = 0;
+      await zip.readEntries(zippedFilepath, async () => {
+        i++;
+        return false;
+      });
+      i.should.equal(1);
+    });
+
     it('should be rejected if it uses a non-zip file', async () => {
-      let promise = zip.readEntries(path.resolve('test', 'assets', 'unzipped', 'test-dir', 'a.txt'), async () => {});
+      let promise = zip.readEntries(path.resolve(assetsPath, 'NotAZipFile.zip'), async () => {});
       await promise.should.eventually.be.rejectedWith(/signature not found/);
     });
   });
@@ -62,32 +85,27 @@ describe('#zip', () => {
   describe('toInMemoryZip()', () => {
     it('should convert a local file to an in-memory zip buffer', async () => {
       // Convert directory to in-memory buffer
-      const testFolder = path.resolve('test', 'assets', 'unzipped');
+      const testFolder = path.resolve(assetsPath, 'unzipped');
       const buffer = await zip.toInMemoryZip(testFolder);
       Buffer.isBuffer(buffer).should.be.true;
 
       // Write the buffer to a zip file
-      const tempPath = await tempDir.openDir();
-      await fs.writeFile(path.resolve(tempPath, 'test.zip'), buffer);
+      await fs.writeFile(path.resolve(assetsPath, 'test.zip'), buffer);
 
       // Unzip the file and test that it has the same contents as the directory that was zipped
-      await zip.extractAllTo(path.resolve(tempPath, 'test.zip'), path.resolve(tempPath, 'output'));
-      await fs.readFile(path.resolve(tempPath, 'output', 'test-dir', 'a.txt'), {encoding: 'utf8'}).should.eventually.equal('Hello World');
-      await fs.readFile(path.resolve(tempPath, 'output', 'test-dir', 'b.txt'), {encoding: 'utf8'}).should.eventually.equal('Foo Bar');
+      await zip.extractAllTo(path.resolve(assetsPath, 'test.zip'), path.resolve(assetsPath, 'output'));
+      await fs.readFile(path.resolve(assetsPath, 'output', 'a.txt'), {encoding: 'utf8'}).should.eventually.equal('Hello World');
+      await fs.readFile(path.resolve(assetsPath, 'output', 'b.txt'), {encoding: 'utf8'}).should.eventually.equal('Foo Bar');
     });
 
-    it('should be rejected if createWriteStream emits an error', async () => {
-      const mockStream = new MockReadWriteStream();
-      mockStream.end = () => mockStream.emit('error', new Error('write stream error'));
-      const writeStreamStub = sinon.stub(nodeFS, 'createWriteStream', () => mockStream);
-      await zip.toInMemoryZip(path.resolve('test', 'assets', 'unzipped')).should.be.rejectedWith(/write stream error/);
-      writeStreamStub.restore();
+    it('should be rejected if use a bad path', async () => {
+      await zip.toInMemoryZip(path.resolve(assetsPath, 'bad_path')).should.be.rejectedWith(/Failed to zip/);
     });
 
     it('should be rejected if there is no access to the directory', async () => {
       let fsStub = sinon.stub(fs, 'hasAccess').returns(false);
       await zip.toInMemoryZip('/path/to/some/directory')
-        .should.be.rejectedWith(/Unable to access directory/);
+        .should.be.rejectedWith(/Failed to zip directory/);
       fsStub.restore();
     });
   });
