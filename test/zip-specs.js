@@ -5,6 +5,7 @@ import mockFS from 'mock-fs';
 import * as zip from '../lib/zip';
 import { tempDir, fs } from '../index';
 import { MockReadWriteStream } from './helpers';
+import sinon from 'sinon';
 
 chai.use(chaiAsPromised);
 
@@ -104,7 +105,7 @@ describe('#zip', () => {
     it('should be rejected if there is no access to the directory', async () => {
       let fsStub = sinon.stub(fs, 'hasAccess').returns(false);
       await zip.toInMemoryZip('/path/to/some/directory')
-        .should.be.rejectedWith(/Unable to access directory/);
+        .should.be.rejectedWith(/Failed to zip directory/);
       fsStub.restore();
     });
   });
