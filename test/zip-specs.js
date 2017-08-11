@@ -47,11 +47,11 @@ describe('#zip', () => {
 
   describe('readEntries()', () => {
     const expectedEntries = [
-      {name: 'unzipped/'}, 
+      {name: 'unzipped/'},
       {name: 'unzipped/test-dir/'},
-      {name: 'unzipped/test-dir/a.txt', contents: 'Hello World'}, 
+      {name: 'unzipped/test-dir/a.txt', contents: 'Hello World'},
       {name: 'unzipped/test-dir/b.txt', contents: 'Foo Bar'},
-    ]; 
+    ];
 
     it('should iterate entries (directories and files) of zip file', async () => {
       let i = 0;
@@ -61,7 +61,7 @@ describe('#zip', () => {
         // If it's a file, test that we can extract it to a temporary directory and that the contents are correct
         if (expectedEntries[i].contents) {
           await extractEntryTo(assetsPath);
-          await fs.readFile(path.resolve(assetsPath, entry.fileName), {flags: 'r', encoding: 'utf8'}).should.eventually.equal(expectedEntries[i].contents); 
+          await fs.readFile(path.resolve(assetsPath, entry.fileName), {flags: 'r', encoding: 'utf8'}).should.eventually.equal(expectedEntries[i].contents);
         }
         i++;
       });
