@@ -32,7 +32,7 @@ function someoneHadOutput (writers, output) {
   for (let writer of _.values(writers)) {
     if (writer.calledWith) {
       hadOutput = writer.calledWithMatch(matchOutput);
-      if (hadOutput) break;
+      if (hadOutput) break; // eslint-disable-line curly
     }
   }
   return hadOutput;

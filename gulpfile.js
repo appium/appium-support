@@ -1,6 +1,12 @@
 "use strict";
 
-var gulp = require('gulp'),
-    boilerplate = require('appium-gulp-plugins').boilerplate.use(gulp);
+const gulp = require('gulp');
+const boilerplate = require('appium-gulp-plugins').boilerplate.use(gulp);
 
-boilerplate({build: 'appium-support', jscs: false});
+boilerplate({
+  build: 'appium-support',
+  coverage: {
+    files: ['./test/**/*-specs.js', '!./test/assets/**'],
+    verbose: true
+  },
+});

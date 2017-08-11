@@ -12,7 +12,7 @@ describe('plist', () => {
     let content = await plist.parsePlistFile(plistPath);
     content.should.have.property('com.apple.locationd.bundle-/System/Library/PrivateFrameworks/Parsec.framework');
   });
-  
+
   it(`should return an empty object if file doesn't exist and mustExist is set to false`, async () => {
     let mustExist = false;
     let content = await plist.parsePlistFile('doesntExist.plist', mustExist);
