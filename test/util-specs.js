@@ -209,4 +209,11 @@ describe('util', function () {
       util.unwrapElement(el).should.eql(4);
     });
   });
+
+  describe('truncate', () => {
+    it('should correctly call truncate', () => {
+      util.truncate('hello world').should.equal('hello world');
+      util.truncate('hello world', {length: 6}).should.equal('hel...');
+    });
+  });
 });
