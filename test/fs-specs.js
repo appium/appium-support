@@ -7,6 +7,7 @@ import { exec } from 'teen_process';
 let should = chai.should();
 
 describe('fs', function () {
+  const existingPath = path.resolve(__dirname, 'fs-specs.js');
   it("should exist", function () {
     should.exist(fs);
   });
@@ -45,47 +46,43 @@ describe('fs', function () {
     });
   });
 
-  it('hasAccess', async () => {
-    let existingPath = path.resolve(__dirname, 'fs-specs.js');
+  it('hasAccess', async function () {
     (await fs.exists(existingPath)).should.be.ok;
     let nonExistingPath = path.resolve(__dirname, 'wrong-specs.js');
     (await fs.hasAccess(nonExistingPath)).should.not.be.ok;
   });
-  it('exists', async () => {
-    let existingPath = path.resolve(__dirname, 'fs-specs.js');
+  it('exists', async function () {
     (await fs.exists(existingPath)).should.be.ok;
     let nonExistingPath = path.resolve(__dirname, 'wrong-specs.js');
     (await fs.exists(nonExistingPath)).should.not.be.ok;
   });
-  it('readFile', async () => {
-    let existingPath = path.resolve(__dirname, 'fs-specs.js');
+  it('readFile', async function () {
     (await fs.readFile(existingPath, 'utf8')).should.contain('readFile');
   });
-  it('copyFile', async () => {
-    let existingPath = path.resolve(__dirname, 'fs-specs.js');
+  it('copyFile', async function () {
     let newPath = path.resolve('/tmp', 'fs-specs.js');
     await fs.copyFile(existingPath, newPath);
     (await fs.readFile(newPath, 'utf8')).should.contain('readFile');
   });
-  it('rimraf', async () => {
+  it('rimraf', async function () {
     let newPath = path.resolve('/tmp', 'fs-specs.js');
     (await fs.exists(newPath)).should.be.true;
     await fs.rimraf(newPath);
     (await fs.exists(newPath)).should.be.false;
   });
   describe('md5', function () {
-    this.timeout(120000);
+    this.timeout(1200000);
     let smallFilePath;
     let bigFilePath;
-    before(async () => {
+    before(async function () {
       // get the path of a small file (this source file)
-      smallFilePath = path.resolve(__dirname, 'fs-specs.js');
+      smallFilePath = existingPath;
 
       // create a large file to test, about 163840000 bytes
       bigFilePath = path.resolve(await tempDir.openDir(), 'enormous.txt');
       let file = await fs.open(bigFilePath, 'w');
       let fileData = '';
-      for (let i = 0; i < (await fs.stat(bigFilePath)).blksize; i++) {
+      for (let i = 0; i < 4096; i++) {
         fileData += '1';
       }
       for (let i = 0; i < 40000; i++) {
@@ -93,33 +90,32 @@ describe('fs', function () {
       }
       await fs.close(file);
     });
-    after(async () => {
+    after(async function () {
       await fs.unlink(bigFilePath);
     });
-    it('should calculate hash of correct length', async () => {
+    it('should calculate hash of correct length', async function () {
       (await fs.md5(smallFilePath)).should.have.length(32);
     });
-    it('should be able to run on huge file', async () => {
+    it('should be able to run on huge file', async function () {
       (await fs.md5(bigFilePath)).should.have.length(32);
     });
   });
-  it('stat', async () => {
-    let existingPath = path.resolve(__dirname, 'fs-specs.js');
+  it('stat', async function () {
     let stat = await fs.stat(existingPath);
     stat.should.have.property('atime');
   });
-  describe('which', () => {
-    it('should find correct executable', async () => {
+  describe('which', function () {
+    it('should find correct executable', async function () {
       let systemNpmPath = (await exec('which', ['npm'])).stdout.trim();
       let npmPath = await fs.which('npm');
       npmPath.should.equal(systemNpmPath);
     });
-    it('should fail gracefully', async () => {
+    it('should fail gracefully', async function () {
       await fs.which('something_that_does_not_exist')
         .should.eventually.be.rejected;
     });
   });
-  it('glob', async () => {
+  it('glob', async function () {
     let glob = 'test/*-specs.js';
     let tests = await fs.glob(glob);
     tests.should.be.an('array');
