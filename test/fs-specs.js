@@ -105,7 +105,7 @@ describe('fs', function () {
     stat.should.have.property('atime');
   });
   describe('which', function () {
-    it('should find correct executable', async () => {
+    it('should find correct executable', async function () {
       let systemNpmPath = (await exec('which', ['npm'])).stdout.trim();
       let npmPath = await fs.which('npm');
       npmPath.should.equal(systemNpmPath);
