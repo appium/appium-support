@@ -7,7 +7,7 @@ import sinon from 'sinon';
 import os from 'os';
 
 
-let should = chai.should();
+const should = chai.should();
 chai.use(chaiAsPromised);
 
 describe('util', function () {
@@ -207,6 +207,61 @@ describe('util', function () {
     it('should unwrap a wrapped element', () => {
       let el = {ELEMENT: 4};
       util.unwrapElement(el).should.eql(4);
+    });
+  });
+
+  describe('filterObject', function () {
+    describe('with undefined predicate', function () {
+      it('should filter out undefineds', function () {
+        let obj = {
+          a: 'a',
+          b: 'b',
+          c: undefined,
+        };
+        util.filterObject(obj).should.eql({
+          a: 'a',
+          b: 'b',
+        });
+      });
+      it('should leave nulls alone', function () {
+        let obj = {
+          a: 'a',
+          b: 'b',
+          c: null,
+        };
+        util.filterObject(obj).should.eql({
+          a: 'a',
+          b: 'b',
+          c: null,
+        });
+      });
+    });
+    describe('with value predicate', function () {
+      it('should filter elements by their value', function () {
+        let obj = {
+          a: 'a',
+          b: 'b',
+          c: 'c',
+          d: 'a',
+        };
+        util.filterObject(obj, 'a').should.eql({
+          a: 'a',
+          d: 'a',
+        });
+      });
+    });
+    describe('with function predicate', function () {
+      it('should filter elements', function () {
+        let obj = {
+          a: 'a',
+          b: 'b',
+          c: 'c',
+        };
+        util.filterObject(obj, (v) => v === 'a' || v === 'c').should.eql({
+          a: 'a',
+          c: 'c',
+        });
+      });
     });
   });
 });
