@@ -1,4 +1,3 @@
-/* eslint-disable */
 import {base64ToImage, imageToBase64, cropImage} from '../lib/image-util';
 import path from 'path';
 import chai from 'chai';
