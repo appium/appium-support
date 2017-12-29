@@ -41,7 +41,8 @@
     "source-map-support": "^0.4.6",
     "teen_process": "^1.5.1",
     "which": "^1.2.4",
-    "yauzl": "^2.7.0"
+    "yauzl": "^2.7.0",
+    "pngjs": "^3.0.0"
   },
   "scripts": {
     "prepublish": "gulp prepublish",
