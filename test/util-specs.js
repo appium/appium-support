@@ -211,6 +211,9 @@ describe('util', function () {
   });
 
   describe('toReadableSizeString', function () {
+    it('should fail if cannot convert to Bytes', function () {
+      (() => util.toReadableSizeString('asdasd')).should.throw(/Cannot convert/);
+    });
     it('should properly convert to Bytes', function () {
       util.toReadableSizeString(0).should.equal('0 B');
     });
