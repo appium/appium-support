@@ -11,11 +11,11 @@ async function getImage (file) {
   return await fs.readFile(imagePath, 'utf8');
 }
 
-describe('image-util', () => {
-  describe('cropBase64Image', () => {
+describe('image-util', function () {
+  describe('cropBase64Image', function () {
     let originalImage = null;
 
-    before(async () => {
+    before(async function () {
       const originalImage64 = await getImage('full-image.b64');
       originalImage = await base64ToImage(originalImage64);
 
@@ -24,7 +24,7 @@ describe('image-util', () => {
       originalImage.height.should.be.equal(1136, 'unexpected height');
     });
 
-    it('should verify that an image is cropped correctly', async () => {
+    it('should verify that an image is cropped correctly', async function () {
       const croppedImage = await cropImage(originalImage, {left: 35, top: 107, width: 323, height: 485});
 
       // verify cropped image size, it should be less than original image according to crop region

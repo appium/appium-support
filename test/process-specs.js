@@ -11,29 +11,29 @@ chai.use(chaiAsPromised);
 
 const SubProcess = teenProcess.SubProcess;
 
-describe('process', () => {
-  describe('getProcessIds', () => {
+describe('process', function () {
+  describe('getProcessIds', function () {
     let proc;
-    before(async () => {
+    before(async function () {
       proc = new SubProcess('tail', ['-f', __filename]);
       await proc.start();
     });
-    after(async () => {
+    after(async function () {
       await proc.stop();
     });
-    it('should get return an array for existing process', async () => {
+    it('should get return an array for existing process', async function () {
       let pids = await process.getProcessIds('tail');
       pids.should.be.an.instanceof(Array);
     });
-    it('should get process identifiers for existing process', async () => {
+    it('should get process identifiers for existing process', async function () {
       let pids = await process.getProcessIds('tail');
       pids.should.have.length.at.least(1);
     });
-    it('should get an empty array when the process does not exist', async () => {
+    it('should get an empty array when the process does not exist', async function () {
       let pids = await process.getProcessIds('sadfgasdfasdf');
       pids.should.have.length(0);
     });
-    it('should throw an error if pgrep fails', async () => {
+    it('should throw an error if pgrep fails', async function () {
       let tpMock = sinon.mock(teenProcess);
       tpMock.expects('exec').throws({message: 'Oops', code: 2});
 
@@ -43,18 +43,18 @@ describe('process', () => {
     });
   });
 
-  describe('killProcess', async () => {
+  describe('killProcess', async function () {
     let proc;
-    beforeEach(async () => {
+    beforeEach(async function () {
       proc = new SubProcess('tail', ['-f', __filename]);
       await proc.start();
     });
-    afterEach(async () => {
+    afterEach(async function () {
       if (proc.isRunning) {
         await proc.stop();
       }
     });
-    it('should kill process that is running', async () => {
+    it('should kill process that is running', async function () {
       proc.isRunning.should.be.true;
       await process.killProcess('tail');
 
@@ -63,7 +63,7 @@ describe('process', () => {
         proc.isRunning.should.be.false;
       });
     });
-    it('should do nothing if the process does not exist', async () => {
+    it('should do nothing if the process does not exist', async function () {
       proc.isRunning.should.be.true;
       await process.killProcess('asdfasdfasdf');
 
@@ -71,7 +71,7 @@ describe('process', () => {
         proc.isRunning.should.be.false;
       }).should.eventually.be.rejected;
     });
-    it('should throw an error if pgrep fails', async () => {
+    it('should throw an error if pgrep fails', async function () {
       let tpMock = sinon.mock(teenProcess);
       tpMock.expects('exec').throws({message: 'Oops', code: 2});
 
@@ -79,7 +79,7 @@ describe('process', () => {
 
       tpMock.restore();
     });
-    it('should throw an error if pkill fails', async () => {
+    it('should throw an error if pkill fails', async function () {
       let tpMock = sinon.mock(teenProcess);
       tpMock.expects('exec').twice()
         .onFirstCall().returns({stdout: '42\n'})

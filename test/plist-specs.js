@@ -7,20 +7,20 @@ chai.should();
 
 const plistPath = path.resolve('test', 'assets', 'sample.plist');
 
-describe('plist', () => {
-  it('should parse plist file as binary', async () => {
+describe('plist', function () {
+  it('should parse plist file as binary', async function () {
     let content = await plist.parsePlistFile(plistPath);
     content.should.have.property('com.apple.locationd.bundle-/System/Library/PrivateFrameworks/Parsec.framework');
   });
 
-  it(`should return an empty object if file doesn't exist and mustExist is set to false`, async () => {
+  it(`should return an empty object if file doesn't exist and mustExist is set to false`, async function () {
     let mustExist = false;
     let content = await plist.parsePlistFile('doesntExist.plist', mustExist);
     content.should.be.an.Object;
     content.should.be.empty;
   });
 
-  it('should write plist file as binary', async () => {
+  it('should write plist file as binary', async function () {
     // create a temporary file, to which we will write
     let plistFile = path.resolve(await tempDir.openDir(), 'sample.plist');
     await fs.copyFile(plistPath, plistFile);

@@ -9,10 +9,10 @@ import sinon from 'sinon';
 
 chai.use(chaiAsPromised);
 
-describe('#zip', () => {
+describe('#zip', function () {
   let zippedFilepath, assetsPath;
 
-  beforeEach(async () => {
+  beforeEach(async function () {
     assetsPath = 'path/to/assets';
     zippedFilepath = path.resolve('test', 'assets', 'zip.zip');
 
@@ -33,19 +33,19 @@ describe('#zip', () => {
     await fs.writeFile(zippedFilepath, zippedBase64, 'base64');
   });
 
-  afterEach(() => {
+  afterEach(function () {
     mockFS.restore();
   });
 
-  describe('extractAllTo()', () => {
-    it('should extract contents of a .zip file to a directory', async () => {
+  describe('extractAllTo()', function () {
+    it('should extract contents of a .zip file to a directory', async function () {
       await zip.extractAllTo(zippedFilepath, path.resolve(assetsPath));
       await fs.readFile(path.resolve(assetsPath, 'unzipped', 'test-dir', 'a.txt'), {encoding: 'utf8'}).should.eventually.equal('Hello World');
       await fs.readFile(path.resolve(assetsPath, 'unzipped', 'test-dir', 'b.txt'), {encoding: 'utf8'}).should.eventually.equal('Foo Bar');
     });
   });
 
-  describe('readEntries()', () => {
+  describe('readEntries()', function () {
     const expectedEntries = [
       {name: 'unzipped/'},
       {name: 'unzipped/test-dir/'},
@@ -53,7 +53,7 @@ describe('#zip', () => {
       {name: 'unzipped/test-dir/b.txt', contents: 'Foo Bar'},
     ];
 
-    it('should iterate entries (directories and files) of zip file', async () => {
+    it('should iterate entries (directories and files) of zip file', async function () {
       let i = 0;
       await zip.readEntries(zippedFilepath, async ({entry, extractEntryTo}) => {
         entry.fileName.should.equal(expectedEntries[i].name);
@@ -67,7 +67,7 @@ describe('#zip', () => {
       });
     });
 
-    it('should stop iterating zipFile if onEntry callback returns false', async () => {
+    it('should stop iterating zipFile if onEntry callback returns false', async function () {
       let i = 0;
       await zip.readEntries(zippedFilepath, async () => {
         i++;
@@ -76,14 +76,14 @@ describe('#zip', () => {
       i.should.equal(1);
     });
 
-    it('should be rejected if it uses a non-zip file', async () => {
+    it('should be rejected if it uses a non-zip file', async function () {
       let promise = zip.readEntries(path.resolve(assetsPath, 'NotAZipFile.zip'), async () => {});
       await promise.should.eventually.be.rejectedWith(/signature not found/);
     });
   });
 
-  describe('toInMemoryZip()', () => {
-    it('should convert a local file to an in-memory zip buffer', async () => {
+  describe('toInMemoryZip()', function () {
+    it('should convert a local file to an in-memory zip buffer', async function () {
       // Convert directory to in-memory buffer
       const testFolder = path.resolve(assetsPath, 'unzipped');
       const buffer = await zip.toInMemoryZip(testFolder);
@@ -98,11 +98,11 @@ describe('#zip', () => {
       await fs.readFile(path.resolve(assetsPath, 'output', 'b.txt'), {encoding: 'utf8'}).should.eventually.equal('Foo Bar');
     });
 
-    it('should be rejected if use a bad path', async () => {
+    it('should be rejected if use a bad path', async function () {
       await zip.toInMemoryZip(path.resolve(assetsPath, 'bad_path')).should.be.rejectedWith(/Failed to zip/);
     });
 
-    it('should be rejected if there is no access to the directory', async () => {
+    it('should be rejected if there is no access to the directory', async function () {
       let fsStub = sinon.stub(fs, 'hasAccess').returns(false);
       await zip.toInMemoryZip('/path/to/some/directory')
         .should.be.rejectedWith(/Failed to zip directory/);
@@ -110,9 +110,9 @@ describe('#zip', () => {
     });
   });
 
-  describe('_extractEntryTo()', () => {
+  describe('_extractEntryTo()', function () {
     let entry, mockZipFile, mockZipStream;
-    beforeEach(async () => {
+    beforeEach(async function () {
       entry = {fileName: path.resolve(await tempDir.openDir(), 'temp', 'file')};
       mockZipStream = new MockReadWriteStream();
       mockZipFile = {
@@ -120,14 +120,14 @@ describe('#zip', () => {
       };
     });
 
-    it('should be rejected if zip stream emits an error', async () => {
+    it('should be rejected if zip stream emits an error', async function () {
       mockZipStream.pipe = () => {
         mockZipStream.emit('error', new Error('zip stream error'));
       };
       await zip._extractEntryTo(mockZipFile, entry).should.be.rejectedWith('zip stream error');
     });
 
-    it('should be rejected if write stream emits an error', async () => {
+    it('should be rejected if write stream emits an error', async function () {
       mockZipStream.pipe = (writeStream) => {
         writeStream.emit('error', new Error('write stream error'));
         mockZipStream.end();
