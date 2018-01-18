@@ -5,13 +5,13 @@ import chai from 'chai';
 chai.should();
 
 describe('tempdir', function () {
-  it('should be able to generate a path', async () => {
+  it('should be able to generate a path', async function () {
     let path = await tempDir.path({prefix: 'myfile', suffix: '.tmp'});
     path.should.exist;
     path.should.include('myfile.tmp');
   });
 
-  it('should be able to create a temp file', async () => {
+  it('should be able to create a temp file', async function () {
     let res = await tempDir.open({prefix: 'my-test-file', suffix: '.zip'});
     res.should.exist;
     res.path.should.exist;
@@ -20,7 +20,7 @@ describe('tempdir', function () {
     await fs.exists(res.path).should.eventually.be.ok;
   });
 
-  it('should generate a random temp dir', async () => {
+  it('should generate a random temp dir', async function () {
     let res = await tempDir.openDir();
     res.should.be.a('string');
     await fs.exists(res).should.eventually.be.ok;
@@ -29,7 +29,7 @@ describe('tempdir', function () {
     res.should.not.equal(res2);
   });
 
-  it('should generate one temp dir used for the life of the process', async () => {
+  it('should generate one temp dir used for the life of the process', async function () {
     let res = await tempDir.staticDir();
     res.should.be.a('string');
     await fs.exists(res).should.eventually.be.ok;

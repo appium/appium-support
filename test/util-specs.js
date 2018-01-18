@@ -176,35 +176,35 @@ describe('util', function () {
     });
   });
 
-  describe('safeJsonParse', () => {
-    it('should pass object through', () => {
+  describe('safeJsonParse', function () {
+    it('should pass object through', function () {
       let obj = {a: 'a', b: 'b'};
       util.safeJsonParse(obj).should.equal(obj);
     });
-    it('should correctly parse json string', () => {
+    it('should correctly parse json string', function () {
       let obj = {a: 'a', b: 'b'};
       util.safeJsonParse(JSON.stringify(obj)).should.eql(obj);
     });
-    it('should pass a number through', () => {
+    it('should pass a number through', function () {
       let num = 42;
       util.safeJsonParse(num).should.eql(num);
     });
-    it('should make a number from a string representation', () => {
+    it('should make a number from a string representation', function () {
       let num = 42;
       util.safeJsonParse(String(num)).should.eql(num);
     });
   });
 
-  describe('unwrapElement', () => {
-    it('should pass through an unwrapped element', () => {
+  describe('unwrapElement', function () {
+    it('should pass through an unwrapped element', function () {
       let el = 4;
       util.unwrapElement(el).should.equal(el);
     });
-    it('should pass through an element that is an object', () => {
+    it('should pass through an element that is an object', function () {
       let el = {RANDOM: 4};
       util.unwrapElement(el).should.equal(el);
     });
-    it('should unwrap a wrapped element', () => {
+    it('should unwrap a wrapped element', function () {
       let el = {ELEMENT: 4};
       util.unwrapElement(el).should.eql(4);
     });

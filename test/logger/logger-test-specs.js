@@ -3,28 +3,28 @@
 import { getDynamicLogger, restoreWriters, setupWriters,
          assertOutputDoesntContain } from './helpers';
 
-describe('test logger', () => {
+describe('test logger', function () {
   let writers, log;
-  before(() => {
+  before(function () {
     writers = setupWriters();
     log = getDynamicLogger(true);
   });
 
-  after(() => {
+  after(function () {
     restoreWriters(writers);
   });
 
-  it('should contains levels', () => {
+  it('should contains levels', function () {
     log.levels.should.have.length.above(3);
     log.levels[2].should.equal('debug');
   });
 
-  it('should unwrap', () => {
+  it('should unwrap', function () {
     log.unwrap.should.exist;
     log.unwrap().should.exist;
   });
 
-  it('should rewrite npmlog levels during testing', () => {
+  it('should rewrite npmlog levels during testing', function () {
     const text = 'hi';
     log.silly(text);
     log.verbose(text);

@@ -5,15 +5,15 @@ import { getDynamicLogger, restoreWriters, setupWriters,
 
 const LOG_LEVELS = ['silly', 'verbose', 'info', 'http', 'warn', 'error'];
 
-describe('normal logger', () => {
+describe('normal logger', function () {
   let writers, log;
-  beforeEach(() => {
+  beforeEach(function () {
     writers = setupWriters();
     log = getDynamicLogger(false, false);
     log.level = 'silly';
   });
 
-  afterEach(() => {
+  afterEach(function () {
     restoreWriters(writers);
   });
 
@@ -39,17 +39,17 @@ describe('normal logger', () => {
   });
 });
 
-describe('normal logger with static prefix', () => {
+describe('normal logger with static prefix', function () {
   let writers, log;
   const PREFIX = 'my_static_prefix';
 
-  before(() => {
+  before(function () {
     writers = setupWriters();
     log = getDynamicLogger(false, false, PREFIX);
     log.level = 'silly';
   });
 
-  after(() => {
+  after(function () {
     restoreWriters(writers);
   });
 
@@ -67,17 +67,17 @@ describe('normal logger with static prefix', () => {
   });
 });
 
-describe('normal logger with dynamic prefix', () => {
+describe('normal logger with dynamic prefix', function () {
   let writers, log;
   const PREFIX = 'my_dynamic_prefix';
 
-  before(() => {
+  before(function () {
     writers = setupWriters();
     log = getDynamicLogger(false, false, () => PREFIX);
     log.level = 'silly';
   });
 
-  after(() => {
+  after(function () {
     restoreWriters(writers);
   });
 
