@@ -210,6 +210,24 @@ describe('util', function () {
     });
   });
 
+  describe('toReadableSizeString', function () {
+    it('should fail if cannot convert to Bytes', function () {
+      (() => util.toReadableSizeString('asdasd')).should.throw(/Cannot convert/);
+    });
+    it('should properly convert to Bytes', function () {
+      util.toReadableSizeString(0).should.equal('0 B');
+    });
+    it('should properly convert to KBytes', function () {
+      util.toReadableSizeString(2048 + 12).should.equal('2.01 KB');
+    });
+    it('should properly convert to MBytes', function () {
+      util.toReadableSizeString(1024 * 1024 * 3 + 1024 * 10).should.equal('3.01 MB');
+    });
+    it('should properly convert to GBytes', function () {
+      util.toReadableSizeString(1024 * 1024 * 1024 * 5).should.equal('5.00 GB');
+    });
+  });
+
   describe('filterObject', function () {
     describe('with undefined predicate', function () {
       it('should filter out undefineds', function () {
