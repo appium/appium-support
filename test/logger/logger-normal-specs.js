@@ -37,6 +37,22 @@ describe('normal logger', function () {
     assertOutputDoesntContain(writers, 'information');
     assertOutputContains(writers, 'warning');
   });
+  it('should split lines of multi-line logs', function () {
+    log.level = 'warn';
+    log.warn('this is one line\nand this is another');
+    assertOutputDoesntContain(writers, 'this is one line\nand this is another');
+    assertOutputContains(writers, 'this is one line');
+    assertOutputContains(writers, 'and this is another');
+  });
+  it('should split stack trace of Error', function () {
+    log.level = 'warn';
+    let error = new Error('this is an error');
+    error.stack = 'stack line 1\nstack line 2';
+    log.warn(error);
+    assertOutputDoesntContain(writers, 'stack line 1\nstack line 2');
+    assertOutputContains(writers, 'stack line 1');
+    assertOutputContains(writers, 'stack line 2');
+  });
 });
 
 describe('normal logger with static prefix', function () {
