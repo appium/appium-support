@@ -1,4 +1,5 @@
-import {base64ToImage, imageToBase64, cropImage} from '../lib/image-util';
+import { base64ToImage, imageToBase64, cropImage,
+         getMatchesCount, getSimilarityScore } from '../lib/image-util';
 import path from 'path';
 import chai from 'chai';
 import {fs} from 'appium-support';
@@ -35,6 +36,35 @@ describe('image-util', function () {
       const croppedImageShouldBe = await getImage('cropped-image.b64');
       const croppedImage64 = await imageToBase64(croppedImage);
       croppedImage64.should.be.equal(croppedImageShouldBe);
+    });
+  });
+
+  describe('OpenCV helpers', function () {
+    let imgFixture = null;
+
+    before(async function () {
+      const imagePath = path.resolve(__dirname, '..', '..', 'test', 'images', 'full-image.b64');
+      imgFixture = Buffer.from(await fs.readFile(imagePath, 'binary'), 'base64');
+    });
+
+    describe('getMatchesCount', function () {
+      it('should calculate the number of matches between two images', async function () {
+        // TODO: include OpenCV 3 libs on Travis
+        if (process.env.CI) {
+          return this.skip();
+        }
+        (await getMatchesCount(imgFixture, imgFixture, 'ORB')).should.be.above(0);
+      });
+    });
+
+    describe('getSimilarityScore', function () {
+      it('should calculate the similarity score between two images', async function () {
+        // TODO: include OpenCV 3 libs on Travis
+        if (process.env.CI) {
+          return this.skip();
+        }
+        (await getSimilarityScore(imgFixture, imgFixture)).should.be.above(0);
+      });
     });
   });
 });
