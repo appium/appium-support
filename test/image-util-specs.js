@@ -1,14 +1,16 @@
 import { base64ToImage, imageToBase64, cropImage,
-         getMatchesCount, getSimilarityScore } from '../lib/image-util';
+         getMatchesCount, getSimilarityScore, getMatchPosition } from '../lib/image-util';
 import path from 'path';
 import chai from 'chai';
-import {fs} from 'appium-support';
+import { fs } from 'appium-support';
 import chaiAsPromised from 'chai-as-promised';
 
 chai.use(chaiAsPromised);
 
-async function getImage (file) {
-  const imagePath = path.resolve(__dirname, '..', '..', 'test', 'images', file);
+const FIXTURES_ROOT = path.resolve(__dirname, '..', '..', 'test', 'images');
+
+async function getImage (name) {
+  const imagePath = path.resolve(FIXTURES_ROOT, name);
   return await fs.readFile(imagePath, 'utf8');
 }
 
@@ -40,30 +42,48 @@ describe('image-util', function () {
   });
 
   describe('OpenCV helpers', function () {
+    // TODO: include OpenCV 3 libs on Travis
     let imgFixture = null;
+    let fullImage = null;
+    let partialImage = null;
 
     before(async function () {
-      const imagePath = path.resolve(__dirname, '..', '..', 'test', 'images', 'full-image.b64');
+      const imagePath = path.resolve(FIXTURES_ROOT, 'full-image.b64');
       imgFixture = Buffer.from(await fs.readFile(imagePath, 'binary'), 'base64');
+      fullImage = await fs.readFile(path.resolve(FIXTURES_ROOT, 'findwaldo.jpg'));
+      partialImage = await fs.readFile(path.resolve(FIXTURES_ROOT, 'waldo.jpg'));
     });
 
     describe('getMatchesCount', function () {
       it('should calculate the number of matches between two images', async function () {
-        // TODO: include OpenCV 3 libs on Travis
         if (process.env.CI) {
           return this.skip();
         }
-        (await getMatchesCount(imgFixture, imgFixture, 'ORB')).should.be.above(0);
+        for (const detectorName of ['AKAZE', 'ORB']) {
+          const count = await getMatchesCount(fullImage, fullImage, detectorName);
+          count.should.be.above(0);
+        }
       });
     });
 
     describe('getSimilarityScore', function () {
       it('should calculate the similarity score between two images', async function () {
-        // TODO: include OpenCV 3 libs on Travis
         if (process.env.CI) {
           return this.skip();
         }
-        (await getSimilarityScore(imgFixture, imgFixture)).should.be.above(0);
+        const score = await getSimilarityScore(imgFixture, imgFixture);
+        score.should.be.above(0);
+      });
+    });
+
+    describe('getMatchPosition', function () {
+      it('should calculate the pertial image position in the full image', async function () {
+        if (process.env.CI) {
+          return this.skip();
+        }
+        const point = await getMatchPosition(fullImage, partialImage);
+        point.x.should.be.above(0);
+        point.y.should.be.above(0);
       });
     });
   });
