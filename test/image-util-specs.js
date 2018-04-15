@@ -1,5 +1,5 @@
 import { base64ToImage, imageToBase64, cropImage,
-         getMatchesCount, getSimilarityScore, getMatchPosition } from '../lib/image-util';
+         getImagesMatches, getImagesSimilarity, getImageOccurrence } from '../lib/image-util';
 import path from 'path';
 import chai from 'chai';
 import { fs } from 'appium-support';
@@ -46,44 +46,72 @@ describe('image-util', function () {
     let imgFixture = null;
     let fullImage = null;
     let partialImage = null;
+    let originalImage = null;
+    let changedImage = null;
 
     before(async function () {
       const imagePath = path.resolve(FIXTURES_ROOT, 'full-image.b64');
       imgFixture = Buffer.from(await fs.readFile(imagePath, 'binary'), 'base64');
       fullImage = await fs.readFile(path.resolve(FIXTURES_ROOT, 'findwaldo.jpg'));
       partialImage = await fs.readFile(path.resolve(FIXTURES_ROOT, 'waldo.jpg'));
+      originalImage = await fs.readFile(path.resolve(FIXTURES_ROOT, 'cc1.png'));
+      changedImage = await fs.readFile(path.resolve(FIXTURES_ROOT, 'cc2.png'));
     });
 
-    describe('getMatchesCount', function () {
+    describe('getImagesMatches', function () {
       it('should calculate the number of matches between two images', async function () {
         if (process.env.CI) {
           return this.skip();
         }
         for (const detectorName of ['AKAZE', 'ORB']) {
-          const count = await getMatchesCount(fullImage, fullImage, detectorName);
+          const {count} = await getImagesMatches(fullImage, fullImage, {detectorName});
           count.should.be.above(0);
         }
       });
+
+      it('should visualize matches between two images', async function () {
+        if (process.env.CI) {
+          return this.skip();
+        }
+        const {visualization} = await getImagesMatches(fullImage, fullImage, {visualize: true});
+        visualization.should.not.be.empty;
+      });
     });
 
-    describe('getSimilarityScore', function () {
+    describe('getImagesSimilarity', function () {
       it('should calculate the similarity score between two images', async function () {
         if (process.env.CI) {
           return this.skip();
         }
-        const score = await getSimilarityScore(imgFixture, imgFixture);
+        const {score} = await getImagesSimilarity(imgFixture, imgFixture);
         score.should.be.above(0);
       });
-    });
 
-    describe('getMatchPosition', function () {
-      it('should calculate the pertial image position in the full image', async function () {
+      it('should visualize the similarity between two images', async function () {
         if (process.env.CI) {
           return this.skip();
         }
-        const point = await getMatchPosition(fullImage, partialImage);
-        point.x.should.be.above(0);
-        point.y.should.be.above(0);
+        const {visualization} = await getImagesSimilarity(originalImage, changedImage, {visualize: true});
+        visualization.should.not.be.empty;
+      });
+    });
+
+    describe('getImageOccurrence', function () {
+      it('should calculate the partial image position in the full image', async function () {
+        if (process.env.CI) {
+          return this.skip();
+        }
+        const {location} = await getImageOccurrence(fullImage, partialImage);
+        location.x.should.be.above(0);
+        location.y.should.be.above(0);
+      });
+
+      it('should visualize the partial image position in the full image', async function () {
+        if (process.env.CI) {
+          return this.skip();
+        }
+        const {visualization} = await getImageOccurrence(fullImage, partialImage, {visualize: true});
+        visualization.should.not.be.empty;
       });
     });
   });
