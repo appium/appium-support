@@ -48,6 +48,7 @@ describe('image-util', function () {
     let partialImage = null;
     let originalImage = null;
     let changedImage = null;
+    let rotatedImage = null;
 
     before(async function () {
       const imagePath = path.resolve(FIXTURES_ROOT, 'full-image.b64');
@@ -56,6 +57,7 @@ describe('image-util', function () {
       partialImage = await fs.readFile(path.resolve(FIXTURES_ROOT, 'waldo.jpg'));
       originalImage = await fs.readFile(path.resolve(FIXTURES_ROOT, 'cc1.png'));
       changedImage = await fs.readFile(path.resolve(FIXTURES_ROOT, 'cc2.png'));
+      rotatedImage = await fs.readFile(path.resolve(FIXTURES_ROOT, 'cc_rotated.png'));
     });
 
     describe('getImagesMatches', function () {
@@ -75,6 +77,27 @@ describe('image-util', function () {
         }
         const {visualization} = await getImagesMatches(fullImage, fullImage, {visualize: true});
         visualization.should.not.be.empty;
+      });
+
+      it('should visualize matches between two images and apply goodMatchesFactor', async function () {
+        if (process.env.CI) {
+          return this.skip();
+        }
+        const {visualization, points1, rect1, points2, rect2} = await getImagesMatches(rotatedImage, originalImage, {
+          visualize: true,
+          goodMatchesFactor: 40
+        });
+        visualization.should.not.be.empty;
+        points1.length.should.be.above(4);
+        rect1.x.should.be.above(0);
+        rect1.y.should.be.above(0);
+        rect1.width.should.be.above(0);
+        rect1.height.should.be.above(0);
+        points2.length.should.be.above(4);
+        rect2.x.should.be.above(0);
+        rect2.y.should.be.above(0);
+        rect2.width.should.be.above(0);
+        rect2.height.should.be.above(0);
       });
     });
 
