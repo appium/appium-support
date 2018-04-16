@@ -66,8 +66,9 @@ describe('image-util', function () {
           return this.skip();
         }
         for (const detectorName of ['AKAZE', 'ORB']) {
-          const {count} = await getImagesMatches(fullImage, fullImage, {detectorName});
+          const {count, totalCount} = await getImagesMatches(fullImage, fullImage, {detectorName});
           count.should.be.above(0);
+          totalCount.should.eql(count);
         }
       });
 
@@ -85,6 +86,7 @@ describe('image-util', function () {
         }
         const {visualization, points1, rect1, points2, rect2} = await getImagesMatches(rotatedImage, originalImage, {
           visualize: true,
+          matchFunc: 'BruteForceHamming',
           goodMatchesFactor: 40
         });
         visualization.should.not.be.empty;
