@@ -3,12 +3,22 @@ node_js:
   - "6"
   - "8"
 sudo: false
+# addons:
+#   apt:
+#     packages:
+#     - libopencv-dev
 addons:
   apt:
+    sources:
+      - llvm-toolchain-trusty-5.0
     packages:
-    - libopencv-dev
+      - clang-5.0
+env:
+  - MATRIX_EVAL="CC=clang-5.0 && CXX=clang++-5.0"
+before_install:
+  - eval "${MATRIX_EVAL}"
 install:
   - npm install
-  - OPENCV4NODEJS_DISABLE_AUTOBUILD=1 npm i opencv4nodejs
+  - npm i opencv4nodejs
 after_success:
   - gulp coveralls
