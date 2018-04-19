@@ -42,6 +42,8 @@ describe('image-util', function () {
   });
 
   describe('OpenCV helpers', function () {
+    this.timeout(60000);
+
     let imgFixture = null;
     let fullImage = null;
     let partialImage = null;
