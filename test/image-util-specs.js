@@ -126,9 +126,11 @@ describe('image-util', function () {
         if (process.env.CI) {
           return this.skip();
         }
-        const {location} = await getImageOccurrence(fullImage, partialImage);
-        location.x.should.be.above(0);
-        location.y.should.be.above(0);
+        const {rect} = await getImageOccurrence(fullImage, partialImage);
+        rect.x.should.be.above(0);
+        rect.y.should.be.above(0);
+        rect.width.should.be.above(0);
+        rect.height.should.be.above(0);
       });
 
       it('should visualize the partial image position in the full image', async function () {
