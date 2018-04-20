@@ -42,7 +42,8 @@ describe('image-util', function () {
   });
 
   describe('OpenCV helpers', function () {
-    this.timeout(60000);
+    // OpenCV needs several seconds for initialization
+    this.timeout(20000);
 
     let imgFixture = null;
     let fullImage = null;
