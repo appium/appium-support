@@ -1,7 +1,16 @@
 language: node_js
 node_js:
   - "6"
-  - "7"
+  - "8"
 sudo: false
+addons:
+  apt:
+    sources:
+      - llvm-toolchain-trusty-5.0
+    packages:
+      - clang-5.0
+install:
+  - npm install
+  - CXX=clang++-5.0 CC=clang-5.0 npm i opencv4nodejs
 after_success:
   - gulp coveralls

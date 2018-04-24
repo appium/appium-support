@@ -42,7 +42,9 @@ describe('image-util', function () {
   });
 
   describe('OpenCV helpers', function () {
-    // TODO: include OpenCV 3 libs on Travis
+    // OpenCV needs several seconds for initialization
+    this.timeout(20000);
+
     let imgFixture = null;
     let fullImage = null;
     let partialImage = null;
@@ -62,9 +64,6 @@ describe('image-util', function () {
 
     describe('getImagesMatches', function () {
       it('should calculate the number of matches between two images', async function () {
-        if (process.env.CI) {
-          return this.skip();
-        }
         for (const detectorName of ['AKAZE', 'ORB']) {
           const {count, totalCount} = await getImagesMatches(fullImage, fullImage, {detectorName});
           count.should.be.above(0);
@@ -73,17 +72,11 @@ describe('image-util', function () {
       });
 
       it('should visualize matches between two images', async function () {
-        if (process.env.CI) {
-          return this.skip();
-        }
         const {visualization} = await getImagesMatches(fullImage, fullImage, {visualize: true});
         visualization.should.not.be.empty;
       });
 
       it('should visualize matches between two images and apply goodMatchesFactor', async function () {
-        if (process.env.CI) {
-          return this.skip();
-        }
         const {visualization, points1, rect1, points2, rect2} = await getImagesMatches(rotatedImage, originalImage, {
           visualize: true,
           matchFunc: 'BruteForceHamming',
@@ -105,17 +98,11 @@ describe('image-util', function () {
 
     describe('getImagesSimilarity', function () {
       it('should calculate the similarity score between two images', async function () {
-        if (process.env.CI) {
-          return this.skip();
-        }
         const {score} = await getImagesSimilarity(imgFixture, imgFixture);
         score.should.be.above(0);
       });
 
       it('should visualize the similarity between two images', async function () {
-        if (process.env.CI) {
-          return this.skip();
-        }
         const {visualization} = await getImagesSimilarity(originalImage, changedImage, {visualize: true});
         visualization.should.not.be.empty;
       });
@@ -123,9 +110,6 @@ describe('image-util', function () {
 
     describe('getImageOccurrence', function () {
       it('should calculate the partial image position in the full image', async function () {
-        if (process.env.CI) {
-          return this.skip();
-        }
         const {rect} = await getImageOccurrence(fullImage, partialImage);
         rect.x.should.be.above(0);
         rect.y.should.be.above(0);
@@ -134,9 +118,6 @@ describe('image-util', function () {
       });
 
       it('should visualize the partial image position in the full image', async function () {
-        if (process.env.CI) {
-          return this.skip();
-        }
         const {visualization} = await getImageOccurrence(fullImage, partialImage, {visualize: true});
         visualization.should.not.be.empty;
       });
