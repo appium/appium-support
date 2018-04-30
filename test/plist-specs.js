@@ -16,7 +16,7 @@ describe('plist', function () {
   it(`should return an empty object if file doesn't exist and mustExist is set to false`, async function () {
     let mustExist = false;
     let content = await plist.parsePlistFile('doesntExist.plist', mustExist);
-    content.should.be.an.Object;
+    content.should.be.an('object');
     content.should.be.empty;
   });
 

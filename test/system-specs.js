@@ -20,22 +20,21 @@ describe('system', function () {
     });
     afterEach(function () {
       osMock.verify();
-      osMock.restore();
     });
 
     it('should correctly return Windows System if it is a Windows', function () {
       osMock.expects('type').returns('Windows_NT');
-      system.isWindows().should.equal.true;
+      system.isWindows().should.be.true;
     });
 
     it('should correctly return Mac if it is a Mac', function () {
       osMock.expects('type').returns('Darwin');
-      system.isMac().should.equal.true;
+      system.isMac().should.be.true;
     });
 
     it('should correctly return Linux if it is a Linux', function () {
       osMock.expects('type').twice().returns('Linux');
-      system.isLinux().should.equal.true;
+      system.isLinux().should.be.true;
     });
   });
 
@@ -45,7 +44,6 @@ describe('system', function () {
     });
     afterEach(function () {
       tpMock.verify();
-      tpMock.restore();
     });
 
     it('should return correct version for 10.10.5', async function () {
