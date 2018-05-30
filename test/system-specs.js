@@ -70,7 +70,7 @@ describe('system', function () {
 
   describe('architecture', function () {
     beforeEach(function () {
-      sandbox = sinon.sandbox.create();
+      sandbox = sinon.createSandbox();
       mocks[SANDBOX] = sandbox;
       for (let [key, value] of _.toPairs(libs)) {
         mocks[key] = sandbox.mock(value);
