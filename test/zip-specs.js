@@ -10,12 +10,10 @@ import sinon from 'sinon';
 chai.use(chaiAsPromised);
 
 describe('#zip', function () {
-  let zippedFilepath, assetsPath;
+  const assetsPath = 'path/to/assets';
+  let zippedFilepath;
 
   beforeEach(async function () {
-    assetsPath = 'path/to/assets';
-    zippedFilepath = path.resolve('test', 'assets', 'zip.zip');
-
     // Mock the filesystem to use in-memory
     mockFS({
       [assetsPath]: {

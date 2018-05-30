@@ -1,5 +1,7 @@
-[![Coverage Status](https://coveralls.io/repos/appium/appium-support/badge.svg?branch=master&service=github)](https://coveralls.io/github/appium/appium-support?branch=master)
 # appium-support
+
+[![Coverage Status](https://coveralls.io/repos/appium/appium-support/badge.svg?branch=master&service=github)](https://coveralls.io/github/appium/appium-support?branch=master)
+[![Greenkeeper badge](https://badges.greenkeeper.io/appium/appium-support.svg)](https://greenkeeper.io/)
 
 Utility functions used to support libs used across appium packages.
 
