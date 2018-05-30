@@ -171,8 +171,9 @@ describe('util', function () {
     });
     it('cancel should work', async function () {
       let delay = util.cancellableDelay('1000');
-      B.delay(10).then(() => { delay.cancel(); }).done(); // eslint-disable-line
-      await delay.should.be.rejectedWith(/cancellation error/);
+      await B.delay(10);
+      delay.cancel();
+      await delay.should.eventually.be.rejectedWith(/cancellation error/);
     });
   });
 
