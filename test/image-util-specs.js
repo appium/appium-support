@@ -6,6 +6,7 @@ import { fs } from 'appium-support';
 import chaiAsPromised from 'chai-as-promised';
 
 chai.use(chaiAsPromised);
+chai.should();
 
 const FIXTURES_ROOT = path.resolve(__dirname, '..', '..', 'test', 'images');
 
@@ -115,6 +116,11 @@ describe('image-util', function () {
         rect.y.should.be.above(0);
         rect.width.should.be.above(0);
         rect.height.should.be.above(0);
+      });
+
+      it('should reject matches that fall below a threshold', async function () {
+        await getImageOccurrence(fullImage, partialImage, {threshold: 1.0})
+          .should.eventually.be.rejectedWith(/threshold/);
       });
 
       it('should visualize the partial image position in the full image', async function () {
