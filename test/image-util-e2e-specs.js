@@ -1,6 +1,8 @@
 import { base64ToImage, imageToBase64, cropImage,
-         getImagesMatches, getImagesSimilarity, getImageOccurrence } from '../lib/image-util';
+         getImagesMatches, getImagesSimilarity, getImageOccurrence,
+         getJimpImage, MIME_PNG } from '../lib/image-util';
 import path from 'path';
+import _ from 'lodash';
 import chai from 'chai';
 import { fs } from 'appium-support';
 import chaiAsPromised from 'chai-as-promised';
@@ -127,6 +129,36 @@ describe('image-util', function () {
         const {visualization} = await getImageOccurrence(fullImage, partialImage, {visualize: true});
         visualization.should.not.be.empty;
       });
+    });
+  });
+
+  describe('Jimp helpers', function () {
+    it('should get a jimp object using image buffer', async function () {
+      const base64Image = await getImage('cropped-image.b64');
+      const imageBuffer = Buffer.from(base64Image, 'base64');
+      const jimpImg = await getJimpImage(imageBuffer);
+      jimpImg.hash().should.eql('80000000000');
+      jimpImg.bitmap.height.should.eql(485);
+      jimpImg.bitmap.width.should.eql(323);
+    });
+    it('should get a jimp object using b64 string', async function () {
+      const base64Image = await getImage('cropped-image.b64');
+      const jimpImg = await getJimpImage(base64Image);
+      jimpImg.hash().should.eql('80000000000');
+      jimpImg.bitmap.height.should.eql(485);
+      jimpImg.bitmap.width.should.eql(323);
+    });
+    it('should error with incorrect data type', async function () {
+      await getJimpImage(1234).should.eventually.be.rejectedWith(/string or buffer/);
+    });
+    it('should error with incorrect image data', async function () {
+      await getJimpImage('foo').should.eventually.be.rejectedWith(/Could not create jimp image/);
+    });
+    it('should get an image buffer via the overridden getBuffer method', async function () {
+      const base64Image = await getImage('cropped-image.b64');
+      const jimpImg = await getJimpImage(base64Image);
+      const buf = await jimpImg.getBuffer(MIME_PNG);
+      _.isBuffer(buf).should.be.true;
     });
   });
 });
