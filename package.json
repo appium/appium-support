@@ -34,7 +34,6 @@
     "jsftp": "^2.1.2",
     "lodash": "^4.2.1",
     "md5-file": "^4.0.0",
-    "mjpeg-consumer": "^1.1.0",
     "mjpeg-server": "^0.3.0",
     "mkdirp": "^0.5.1",
     "mv": "^2.1.1",
@@ -51,6 +50,7 @@
     "yauzl": "^2.7.0"
   },
   "scripts": {
+    "clean": "rm -rf node_modules && rm -f package-lock.json && npm install",
     "prepublish": "gulp prepublish",
     "test": "gulp once",
     "watch": "gulp watch",
