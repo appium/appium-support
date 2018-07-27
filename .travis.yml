@@ -12,6 +12,7 @@ addons:
 install:
   - npm install
   - CXX=clang++-5.0 CC=clang-5.0 npm i opencv4nodejs
+  - npm install --no-save mjpeg-consumer
 script:
   - npm run test
   - npm run e2e-test
