@@ -62,9 +62,9 @@ describe('system', function () {
     });
 
     it("should throw an error if OSX version can't be determined", async function () {
-      let invalidOsx = '99.99.99';
+      let invalidOsx = 'error getting operation system version blabla';
       tpMock.expects('exec').once().withExactArgs('sw_vers', ['-productVersion']).returns({stdout: invalidOsx});
-      await system.macOsxVersion().should.eventually.be.rejectedWith(invalidOsx);
+      await system.macOsxVersion().should.eventually.be.rejectedWith(new RegExp(_.escapeRegExp(invalidOsx)));
     });
   });
 
