@@ -11,7 +11,7 @@ function setupWriters () {
           'stderr': sinon.spy(process.stderr, 'write')};
 }
 
-function getDynamicLogger (testingMode, forceLogs, prefix=null) {
+function getDynamicLogger (testingMode, forceLogs, prefix = null) {
   process.env._TESTING = testingMode ? '1' : '0';
   process.env._FORCE_LOGS = forceLogs ? '1' : '0';
   return logger.getLogger(prefix);
@@ -50,5 +50,7 @@ function assertOutputDoesntContain (writers, output) {
   }
 }
 
-export { setupWriters, restoreWriters, assertOutputContains,
-         assertOutputDoesntContain, getDynamicLogger };
+export {
+  setupWriters, restoreWriters, assertOutputContains, assertOutputDoesntContain,
+  getDynamicLogger,
+};

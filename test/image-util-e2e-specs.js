@@ -4,7 +4,7 @@ import { base64ToImage, imageToBase64, cropImage,
 import path from 'path';
 import _ from 'lodash';
 import chai from 'chai';
-import { fs } from 'appium-support';
+import { fs } from '..';
 import chaiAsPromised from 'chai-as-promised';
 
 chai.use(chaiAsPromised);

@@ -12,7 +12,12 @@ import * as zip from './lib/zip';
 import * as imageUtil from './lib/image-util';
 import * as mjpeg from './lib/mjpeg';
 
-// can't add to other exports `as default`
-// until JSHint figures out how to parse that pattern
-export default { tempDir, system, util, fs, cancellableDelay, plist, mkdirp,
-                 logger, process, zip, imageUtil, net, mjpeg };
+
+export {
+  tempDir, system, util, fs, cancellableDelay, plist, mkdirp, logger, process,
+  zip, imageUtil, net, mjpeg,
+};
+export default {
+  tempDir, system, util, fs, cancellableDelay, plist, mkdirp, logger, process,
+  zip, imageUtil, net, mjpeg,
+};

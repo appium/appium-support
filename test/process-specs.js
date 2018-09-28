@@ -43,7 +43,7 @@ describe('process', function () {
     });
   });
 
-  describe('killProcess', async function () {
+  describe('killProcess', function () {
     let proc;
     beforeEach(async function () {
       proc = new SubProcess('tail', ['-f', __filename]);
@@ -59,7 +59,7 @@ describe('process', function () {
       await process.killProcess('tail');
 
       // it may take a moment to actually be registered as killed
-      await retryInterval(10, 100, async () => {
+      await retryInterval(10, 100, async () => { // eslint-disable-line require-await
         proc.isRunning.should.be.false;
       });
     });
@@ -67,7 +67,7 @@ describe('process', function () {
       proc.isRunning.should.be.true;
       await process.killProcess('asdfasdfasdf');
 
-      await retryInterval(10, 100, async () => {
+      await retryInterval(10, 100, async () => { // eslint-disable-line require-await
         proc.isRunning.should.be.false;
       }).should.eventually.be.rejected;
     });
