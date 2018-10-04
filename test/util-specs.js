@@ -283,4 +283,19 @@ describe('util', function () {
       });
     });
   });
+
+  describe('isSubPath', function () {
+    it('should properly detect simple subpath', function () {
+      util.isSubPath('/root/some', '/root').should.be.true;
+    });
+    it('should properly detect complex subpath', function () {
+      util.isSubPath('/root/some/other/../../.', '/root').should.be.true;
+    });
+    it('should properly detect subpath ending with a slash', function () {
+      util.isSubPath('/root/some/', '/root').should.be.true;
+    });
+    it('should properly detect if a path is not a subpath', function () {
+      util.isSubPath('/root/some//../..', '/root').should.be.false;
+    });
+  });
 });
