@@ -285,19 +285,19 @@ describe('util', function () {
   });
 
   describe('isSubPath', function () {
-    it('should properly detect simple subpath', function () {
+    it('should detect simple subpath', function () {
       util.isSubPath('/root/some', '/root').should.be.true;
     });
-    it('should properly detect complex subpath', function () {
+    it('should detect complex subpath', function () {
       util.isSubPath('/root/some/other/../../.', '/root').should.be.true;
     });
-    it('should properly detect subpath ending with a slash', function () {
+    it('should detect subpath ending with a slash', function () {
       util.isSubPath('/root/some/', '/root').should.be.true;
     });
-    it('should properly detect if a path is not a subpath', function () {
+    it('should detect if a path is not a subpath', function () {
       util.isSubPath('/root/some//../..', '/root').should.be.false;
     });
-    it('should fail if any of the paths is not absolute', function () {
+    it('should throw if any of the given paths is not absolute', function () {
       should.throw(() => util.isSubPath('some/..', '/root'), /absolute/);
     });
   });
