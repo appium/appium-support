@@ -297,5 +297,8 @@ describe('util', function () {
     it('should properly detect if a path is not a subpath', function () {
       util.isSubPath('/root/some//../..', '/root').should.be.false;
     });
+    it('should fail if any of the paths is not absolute', function () {
+      should.throw(() => util.isSubPath('some/..', '/root'), /absolute/);
+    });
   });
 });
