@@ -40,7 +40,7 @@ describe('MJpeg Stream (e2e)', function () {
     const endBytes = Buffer.from([0xff, 0xd9]);
     const startPos = stream.lastChunk.indexOf(startBytes);
     const endPos = stream.lastChunk.indexOf(endBytes);
-    startPos.should.eql(0);   // proves we have a jpeg
+    startPos.should.eql(0); // proves we have a jpeg
     endPos.should.eql(1278); // proves we have a jpeg of the right size
 
     // verify we can get the base64 version too

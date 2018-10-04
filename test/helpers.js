@@ -1,21 +1,13 @@
 import { EventEmitter } from 'events';
 
 class MockReadWriteStream extends EventEmitter {
-  resume () {
+  resume () {}
 
-  }
+  pause () {}
 
-  pause () {
+  setEncoding () {}
 
-  }
-
-  setEncoding () {
-
-  }
-
-  flush () {
-
-  }
+  flush () {}
 
   write (msg) {
     this.emit('data', msg);

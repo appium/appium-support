@@ -67,7 +67,7 @@ describe('#zip', function () {
 
     it('should stop iterating zipFile if onEntry callback returns false', async function () {
       let i = 0;
-      await zip.readEntries(zippedFilepath, async () => {
+      await zip.readEntries(zippedFilepath, async () => { // eslint-disable-line require-await
         i++;
         return false;
       });
