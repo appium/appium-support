@@ -301,4 +301,22 @@ describe('util', function () {
       });
     });
   });
+
+  describe('isSubPath', function () {
+    it('should detect simple subpath', function () {
+      util.isSubPath('/root/some', '/root').should.be.true;
+    });
+    it('should detect complex subpath', function () {
+      util.isSubPath('/root/some/other/../../.', '/root').should.be.true;
+    });
+    it('should detect subpath ending with a slash', function () {
+      util.isSubPath('/root/some/', '/root').should.be.true;
+    });
+    it('should detect if a path is not a subpath', function () {
+      util.isSubPath('/root/some//../..', '/root').should.be.false;
+    });
+    it('should throw if any of the given paths is not absolute', function () {
+      should.throw(() => util.isSubPath('some/..', '/root'), /absolute/);
+    });
+  });
 });
