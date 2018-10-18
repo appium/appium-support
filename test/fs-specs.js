@@ -100,6 +100,14 @@ describe('fs', function () {
       (await fs.md5(bigFilePath)).should.have.length(32);
     });
   });
+  describe('hash', function () {
+    it('should calculate sha1 hash', async function () {
+      (await fs.hash(existingPath, 'sha1')).should.have.length(40);
+    });
+    it('should calculate md5 hash', async function () {
+      (await fs.hash(existingPath, 'md5')).should.have.length(32);
+    });
+  });
   it('stat', async function () {
     let stat = await fs.stat(existingPath);
     stat.should.have.property('atime');

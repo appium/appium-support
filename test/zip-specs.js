@@ -43,6 +43,19 @@ describe('#zip', function () {
     });
   });
 
+  describe('assertValidZip', function () {
+    it('should not throw an error if a valid ZIP file is passed', async function () {
+      await zip.assertValidZip(zippedFilepath).should.eventually.be.fulfilled;
+    });
+    it('should throw an error if the file does not exist', async function () {
+      await zip.assertValidZip('blabla').should.eventually.be.rejected;
+    });
+    it('should throw an error if the file is invalid', async function () {
+      await zip.extractAllTo(zippedFilepath, path.resolve(assetsPath));
+      await zip.assertValidZip(path.resolve(assetsPath, 'unzipped', 'test-dir', 'a.txt')).should.eventually.be.rejected;
+    });
+  });
+
   describe('readEntries()', function () {
     const expectedEntries = [
       {name: 'unzipped/'},
