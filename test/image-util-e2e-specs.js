@@ -152,7 +152,7 @@ describe('image-util', function () {
       await getJimpImage(1234).should.eventually.be.rejectedWith(/string or buffer/);
     });
     it('should error with incorrect image data', async function () {
-      await getJimpImage('foo').should.eventually.be.rejectedWith(/Could not create jimp image/);
+      await getJimpImage('foo').should.eventually.be.rejectedWith(/Could not find MIME for Buffer/);
     });
     it('should get an image buffer via the overridden getBuffer method', async function () {
       const base64Image = await getImage('cropped-image.b64');
