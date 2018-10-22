@@ -59,13 +59,22 @@ describe('fs', function () {
   it('readFile', async function () {
     (await fs.readFile(existingPath, 'utf8')).should.contain('readFile');
   });
-  it('copyFile', async function () {
-    let newPath = path.resolve('/tmp', 'fs-specs.js');
-    await fs.copyFile(existingPath, newPath);
-    (await fs.readFile(newPath, 'utf8')).should.contain('readFile');
+
+  describe('copyFile', function () {
+    it('should be able to copy a file', async function () {
+      let newPath = path.resolve('/tmp', 'fs-specs.js');
+      await fs.copyFile(existingPath, newPath);
+      (await fs.readFile(newPath, 'utf8')).should.contain('readFile');
+    });
+
+    it('should throw an error if the source does not exist', async function () {
+      await fs.copyFile('/sdfsdfsdfsdf', '/tmp/bla').should.eventually.be.rejected;
+    });
   });
+
   it('rimraf', async function () {
     let newPath = path.resolve('/tmp', 'fs-specs.js');
+    await fs.copyFile(existingPath, newPath);
     (await fs.exists(newPath)).should.be.true;
     await fs.rimraf(newPath);
     (await fs.exists(newPath)).should.be.false;
