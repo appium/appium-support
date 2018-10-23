@@ -16,7 +16,7 @@ env:
 install:
   - npm install
   - |
-    printf "while [ true ]; do\nsleep 30\necho 'ping'\ndone" > ping.sh
+    printf "while [ true ]; do\nsleep 30\necho 'Building OpenCV'\ndone" > ping.sh
     bash ping.sh &
     echo $! > ping.pid
     npm i opencv4nodejs > /dev/null 2>&1
