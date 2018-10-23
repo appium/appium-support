@@ -102,8 +102,12 @@ describe('#zip', function () {
 
       // Unzip the file and test that it has the same contents as the directory that was zipped
       await zip.extractAllTo(path.resolve(tmpRoot, 'test.zip'), path.resolve(tmpRoot, 'output'));
-      await fs.readFile(path.resolve(tmpRoot, 'test-dir', 'a.txt'), {encoding: 'utf8'}).should.eventually.equal('Hello World');
-      await fs.readFile(path.resolve(tmpRoot, 'test-dir', 'b.txt'), {encoding: 'utf8'}).should.eventually.equal('Foo Bar');
+      await fs.readFile(path.resolve(tmpRoot, 'output', 'test-dir', 'a.txt'), {
+        encoding: 'utf8'
+      }).should.eventually.equal('Hello World');
+      await fs.readFile(path.resolve(tmpRoot, 'output', 'test-dir', 'b.txt'), {
+        encoding: 'utf8'
+      }).should.eventually.equal('Foo Bar');
     });
 
     it('should be rejected if use a bad path', async function () {
