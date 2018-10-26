@@ -18,9 +18,9 @@ const { mkdirp } = mkdirpIndex;
 
 export {
   tempDir, system, util, fs, cancellableDelay, plist, mkdirp, logger, process,
-  zip, imageUtil, net, mjpeg,
+  zip, imageUtil, net, mjpeg
 };
 export default {
   tempDir, system, util, fs, cancellableDelay, plist, mkdirp, logger, process,
-  zip, imageUtil, net, mjpeg,
+  zip, imageUtil, net, mjpeg
 };

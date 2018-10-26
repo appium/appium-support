@@ -6,6 +6,8 @@ import B from 'bluebird';
 import sinon from 'sinon';
 import os from 'os';
 
+const {W3C_WEB_ELEMENT_IDENTIFIER} = util;
+
 
 const should = chai.should();
 chai.use(chaiAsPromised);
@@ -226,6 +228,19 @@ describe('util', function () {
     it('should unwrap a wrapped element', function () {
       let el = {ELEMENT: 4};
       util.unwrapElement(el).should.eql(4);
+    });
+    it('should unwrap a wrapped element that uses W3C element identifier', function () {
+      let el = {
+        [W3C_WEB_ELEMENT_IDENTIFIER]: 5
+      };
+      util.unwrapElement(el).should.eql(5);
+    });
+    it('should unwrap a wrapped element and prioritize W3C element identifier', function () {
+      let el = {
+        ELEMENT: 7,
+        [W3C_WEB_ELEMENT_IDENTIFIER]: 6,
+      };
+      util.unwrapElement(el).should.eql(6);
     });
   });
 
