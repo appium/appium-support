@@ -28,7 +28,7 @@ describe('fs', function () {
   describe("mkdir", function () {
     let dirName = path.resolve(__dirname, "tmp");
 
-    it("should make a directory that doesn't exist", async function () {
+    it("should make a directory that does not exist", async function () {
       await fs.rimraf(dirName);
       await fs.mkdir(dirName);
       let exists = await fs.hasAccess(dirName);
@@ -62,7 +62,7 @@ describe('fs', function () {
 
   describe('copyFile', function () {
     it('should be able to copy a file', async function () {
-      let newPath = path.resolve('/tmp', 'fs-specs.js');
+      let newPath = path.resolve(await tempDir.openDir(), 'fs-specs.js');
       await fs.copyFile(existingPath, newPath);
       (await fs.readFile(newPath, 'utf8')).should.contain('readFile');
     });
@@ -73,7 +73,7 @@ describe('fs', function () {
   });
 
   it('rimraf', async function () {
-    let newPath = path.resolve('/tmp', 'fs-specs.js');
+    let newPath = path.resolve(await tempDir.openDir(), 'fs-specs.js');
     await fs.copyFile(existingPath, newPath);
     (await fs.exists(newPath)).should.be.true;
     await fs.rimraf(newPath);

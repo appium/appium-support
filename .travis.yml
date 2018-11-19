@@ -26,4 +26,4 @@ script:
   - npm run test
   - npm run e2e-test
 after_success:
-  - gulp coveralls
+  - npm run coverage
