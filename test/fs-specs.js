@@ -138,4 +138,30 @@ describe('fs', function () {
     tests.should.be.an('array');
     tests.should.have.length.above(2);
   });
+  describe('isSameDestination', function () {
+    let path1;
+    let path2;
+    let tmpDir;
+    before(async function () {
+      tmpDir = await tempDir.openDir();
+      path1 = path.resolve(tmpDir, 'path1.txt');
+      path2 = path.resolve(tmpDir, 'path2.txt');
+      for (const p of [path1, path2]) {
+        await fs.writeFile(p, p, 'utf8');
+      }
+    });
+    after(async function () {
+      await fs.rimraf(tmpDir);
+    });
+    it('should match paths to the same file/folder', async function () {
+      (await fs.isSameDestination(path1, path.resolve(tmpDir, '..', path.basename(tmpDir), path.basename(path1))))
+        .should.be.true;
+    });
+    it('should not match paths if they point to non existing items', async function () {
+      (await fs.isSameDestination(path1, 'blabla')).should.be.false;
+    });
+    it('should not match paths to different files', async function () {
+      (await fs.isSameDestination(path1, path2)).should.be.false;
+    });
+  });
 });
