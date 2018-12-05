@@ -1,10 +1,11 @@
 
-import { util } from '..';
+import { util, fs, tempDir } from '..';
 import chai from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import B from 'bluebird';
 import sinon from 'sinon';
 import os from 'os';
+import path from 'path';
 
 const {W3C_WEB_ELEMENT_IDENTIFIER} = util;
 
@@ -332,6 +333,33 @@ describe('util', function () {
     });
     it('should throw if any of the given paths is not absolute', function () {
       should.throw(() => util.isSubPath('some/..', '/root'), /absolute/);
+    });
+  });
+
+  describe('isSameDestination', function () {
+    let path1;
+    let path2;
+    let tmpDir;
+    before(async function () {
+      tmpDir = await tempDir.openDir();
+      path1 = path.resolve(tmpDir, 'path1.txt');
+      path2 = path.resolve(tmpDir, 'path2.txt');
+      for (const p of [path1, path2]) {
+        await fs.writeFile(p, p, 'utf8');
+      }
+    });
+    after(async function () {
+      await fs.rimraf(tmpDir);
+    });
+    it('should match paths to the same file/folder', async function () {
+      (await util.isSameDestination(path1, path.resolve(tmpDir, '..', path.basename(tmpDir), path.basename(path1))))
+        .should.be.true;
+    });
+    it('should not match paths if they point to non existing items', async function () {
+      (await util.isSameDestination(path1, 'blabla')).should.be.false;
+    });
+    it('should not match paths to different files', async function () {
+      (await util.isSameDestination(path1, path2)).should.be.false;
     });
   });
 });
