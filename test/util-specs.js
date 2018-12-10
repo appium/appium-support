@@ -245,6 +245,15 @@ describe('util', function () {
     });
   });
 
+  describe('wrapElement', function () {
+    it('should include ELEMENT and w3c element', function () {
+      util.wrapElement(123).should.eql({
+        [util.W3C_WEB_ELEMENT_IDENTIFIER]: 123,
+        ELEMENT: 123,
+      });
+    });
+  });
+
   describe('toReadableSizeString', function () {
     it('should fail if cannot convert to Bytes', function () {
       (() => util.toReadableSizeString('asdasd')).should.throw(/Cannot convert/);
