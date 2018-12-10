@@ -28,6 +28,8 @@ Also note that `fs.mkdir` doesn't throw an error if the directory already exists
 - util.localIp
 - util.cancellableDelay
 - util.multiResolve - multiple path.resolve
+- util.unwrapElement - parse an element ID from an element object: e.g.: `{ELEMENT: 123, "element-6066-11e4-a52e-4f735466cecf": 123}` returns `123`
+- util.wrapElement - convert an element ID to an element object of the form: e.g.: `123` returns `{ELEMENT: 123, "element-6066-11e4-a52e-4f735466cecf": 123}`
 
 - *fs.hasAccess* - use this over `fs.access`
 - *fs.exists* - calls `fs.hasAccess`
