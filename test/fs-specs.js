@@ -8,10 +8,10 @@ let should = chai.should();
 
 describe('fs', function () {
   const existingPath = path.resolve(__dirname, 'fs-specs.js');
-  it("should exist", function () {
+  it('should exist', function () {
     should.exist(fs);
   });
-  it("should have expected methods", function () {
+  it('should have expected methods', function () {
     should.exist(fs.open);
     should.exist(fs.close);
     should.exist(fs.access);
@@ -25,24 +25,24 @@ describe('fs', function () {
     should.exist(fs.mv);
   });
 
-  describe("mkdir", function () {
-    let dirName = path.resolve(__dirname, "tmp");
+  describe('mkdir', function () {
+    let dirName = path.resolve(__dirname, 'tmp');
 
-    it("should make a directory that does not exist", async function () {
+    it('should make a directory that does not exist', async function () {
       await fs.rimraf(dirName);
       await fs.mkdir(dirName);
       let exists = await fs.hasAccess(dirName);
       exists.should.be.true;
     });
 
-    it("should not complain if the dir already exists", async function () {
+    it('should not complain if the dir already exists', async function () {
       let exists = await fs.hasAccess(dirName);
       exists.should.be.true;
       await fs.mkdir(dirName);
     });
 
-    it("should still throw an error if something else goes wrong", async function () {
-      await fs.mkdir("/bin/foo").should.be.rejected;
+    it('should still throw an error if something else goes wrong', async function () {
+      await fs.mkdir('/bin/foo').should.be.rejected;
     });
   });
 
