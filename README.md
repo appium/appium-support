@@ -72,7 +72,7 @@ tests (doesn't output logs when run with `_TESTING=1` in the env).
 There are a number of levels, exposed as methods on the log object, at which logging can be made. The built-in ones correspond to those of [npmlog](https://github.com/npm/npmlog#loglevelprefix-message-), and are:
 `silly`, `verbose`, `info`, `http`, `warn`, and `error`. In addition there is a `debug` level.
 
-The default threshhold level is `verbose`.
+The default threshold level is `verbose`.
 
 The logged output, by default, will be `level prefix message`. So
 
@@ -106,7 +106,7 @@ There are two environment variable flags that affect the way `appium-base-driver
 
 `log.level`
 
-- get and set the threshhold level at which to display the logs. Any logs at or above this level will be displayed. The special level silent will prevent anything from being displayed ever. See [npmlog#level](https://github.com/npm/npmlog#loglevel).
+- get and set the threshold level at which to display the logs. Any logs at or above this level will be displayed. The special level silent will prevent anything from being displayed ever. See [npmlog#level](https://github.com/npm/npmlog#loglevel).
 
 `log[level](message)`
 
