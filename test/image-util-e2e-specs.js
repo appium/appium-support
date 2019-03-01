@@ -73,7 +73,7 @@ describe('image-util', function () {
     });
 
     describe('getImagesMatches', function () {
-      it('should calculate the number of matches between two images', async function () {
+      it.only('should calculate the number of matches between two images', async function () { // eslint-disable-line
         for (const detectorName of ['AKAZE', 'ORB']) {
           const {count, totalCount} = await getImagesMatches(fullImage, fullImage, {detectorName});
           count.should.be.above(0);
