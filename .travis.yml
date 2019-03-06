@@ -13,16 +13,15 @@ env:
     - CXX=clang++-5.0
     - CC=clang-5.0
 install:
-  - npm install
   - |
     printf "while [ true ]; do\nsleep 30\necho 'Building OpenCV'\ndone" > ping.sh
     bash ping.sh &
     echo $! > ping.pid
-    npm i opencv4nodejs > /dev/null 2>&1
+    npm i -g opencv4nodejs > /dev/null 2>&1
     kill `cat ping.pid`
+  - npm install
   - npm install --no-save mjpeg-consumer
 script:
-  - npm run test
-  - npm run e2e-test
+  - npm run test && npm run e2e-test
 after_success:
   - npm run coverage
