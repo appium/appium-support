@@ -384,7 +384,9 @@ describe('util', function () {
     it('should return null if any of arguments is invalid', function () {
       (util.compareVersions(undefined, '<', '11.0') === null).should.eql(true);
       (util.compareVersions('11.0', '==', null) === null).should.eql(true);
-      (util.compareVersions('12.0', 'abc', 10) === null).should.eql(true);
+    });
+    it('should throw if comparison operator is unsupported', function () {
+      should.throw(() => util.compareVersions('12.0', 'abc', 10));
     });
   });
 
