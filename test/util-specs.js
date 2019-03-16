@@ -371,4 +371,21 @@ describe('util', function () {
       (await util.isSameDestination(path1, path2)).should.be.false;
     });
   });
+
+  describe('compareVersions', function () {
+    it('should compare two correct version numbers', function () {
+      util.compareVersions('10.0', '<', '11.0').should.eql(true);
+      util.compareVersions('11.0', '>=', '11.0').should.eql(true);
+      util.compareVersions('11.0', '==', '11.0').should.eql(true);
+      util.compareVersions('13.10', '>', '13.5').should.eql(true);
+      util.compareVersions('11.1', '!=', '11.10').should.eql(true);
+      util.compareVersions('12.0', '<', 10).should.eql(false);
+    });
+    it('should return null if any of arguments is invalid', function () {
+      (util.compareVersions(undefined, '<', '11.0') === null).should.eql(true);
+      (util.compareVersions('11.0', '==', null) === null).should.eql(true);
+      (util.compareVersions('12.0', 'abc', 10) === null).should.eql(true);
+    });
+  });
+
 });
