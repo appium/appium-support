@@ -381,9 +381,9 @@ describe('util', function () {
       util.compareVersions('11.1', '!=', '11.10').should.eql(true);
       util.compareVersions('12.0', '<', 10).should.eql(false);
     });
-    it('should return null if any of arguments is invalid', function () {
-      (util.compareVersions(undefined, '<', '11.0') === null).should.eql(true);
-      (util.compareVersions('11.0', '==', null) === null).should.eql(true);
+    it('should throw if any of version arguments is invalid', function () {
+      should.throw(() => util.compareVersions(undefined, '<', '11.0'));
+      should.throw(() => util.compareVersions('11.0', '==', null));
     });
     it('should throw if comparison operator is unsupported', function () {
       should.throw(() => util.compareVersions('12.0', 'abc', 10));
