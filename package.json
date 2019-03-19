@@ -59,7 +59,6 @@
   "scripts": {
     "clean": "rm -rf node_modules && rm -f package-lock.json && npm install",
     "prepare": "gulp prepublish",
-    "postinstall": "npm ls -g opencv4nodejs --depth=0 && npm link opencv4nodejs",
     "test": "gulp once",
     "watch": "gulp watch",
     "mocha": "mocha",
