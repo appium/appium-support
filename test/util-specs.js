@@ -371,4 +371,23 @@ describe('util', function () {
       (await util.isSameDestination(path1, path2)).should.be.false;
     });
   });
+
+  describe('compareVersions', function () {
+    it('should compare two correct version numbers', function () {
+      util.compareVersions('10.0', '<', '11.0').should.eql(true);
+      util.compareVersions('11.0', '>=', '11.0').should.eql(true);
+      util.compareVersions('11.0', '==', '11.0').should.eql(true);
+      util.compareVersions('13.10', '>', '13.5').should.eql(true);
+      util.compareVersions('11.1', '!=', '11.10').should.eql(true);
+      util.compareVersions('12.0', '<', 10).should.eql(false);
+    });
+    it('should throw if any of version arguments is invalid', function () {
+      should.throw(() => util.compareVersions(undefined, '<', '11.0'));
+      should.throw(() => util.compareVersions('11.0', '==', null));
+    });
+    it('should throw if comparison operator is unsupported', function () {
+      should.throw(() => util.compareVersions('12.0', 'abc', 10));
+    });
+  });
+
 });
