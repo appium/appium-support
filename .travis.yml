@@ -17,7 +17,7 @@ install:
     printf "while [ true ]; do\nsleep 30\necho 'Building OpenCV'\ndone" > ping.sh
     bash ping.sh &
     echo $! > ping.pid
-    npm i -g opencv4nodejs > /dev/null 2>&1
+    npm i opencv4nodejs > /dev/null 2>&1
     kill `cat ping.pid`
   - npm install
   - npm install --no-save mjpeg-consumer
