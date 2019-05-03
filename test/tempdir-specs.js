@@ -120,7 +120,7 @@ describe('tempdir', function () {
 
     res.should.be.a('string');
     await fs.exists(res).should.eventually.be.ok;
-    let res2 = await tempDir.openDir(null); // or undefined
+    let res2 = await tempDir.openDir(null);
     await fs.exists(res2).should.eventually.be.ok;
     res.should.not.equal(res2);
   });
