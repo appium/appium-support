@@ -6,6 +6,10 @@ import nodePath from 'path';
 chai.should();
 
 describe('tempdir', function () {
+  afterEach(function () {
+    process.env.APPIUM_TEMP_DIR = null;
+  });
+
   it('should be able to generate a path', async function () {
     const path = await tempDir.path({prefix: 'myfile', suffix: '.tmp'});
     path.should.exist;
@@ -13,9 +17,18 @@ describe('tempdir', function () {
   });
 
   it('should be able to generate a path with tempDirectory', async function () {
-    const preDirPath = await tempDir.staticDir();
+    const preDirPath = await tempDir.staticDir(false);
 
-    const path = await tempDir.path({prefix: 'myfile', suffix: '.tmp'}, undefined, preDirPath);
+    const path = await tempDir.path({prefix: 'myfile', suffix: '.tmp'}, undefined, false);
+    path.should.exist;
+    path.should.equal(nodePath.join(preDirPath, 'myfile.tmp'));
+  });
+
+  it('should be able to generate a path with process arg tempDirectory', async function () {
+    const preDirPath = await tempDir.staticDir(false);
+    process.env.APPIUM_TEMP_DIR = preDirPath;
+
+    const path = await tempDir.path({prefix: 'myfile', suffix: '.tmp'});
     path.should.exist;
     path.should.equal(nodePath.join(preDirPath, 'myfile.tmp'));
   });
@@ -30,9 +43,10 @@ describe('tempdir', function () {
   });
 
   it('should be able to create a temp file with tempDirectory', async function () {
-    const preDirPath = await tempDir.staticDir();
+    const preDirPath = await tempDir.staticDir(false);
+    process.env.APPIUM_TEMP_DIR = preDirPath;
 
-    let res = await tempDir.open({prefix: 'my-test-file', suffix: '.zip'}, preDirPath);
+    let res = await tempDir.open({prefix: 'my-test-file', suffix: '.zip'}, false);
     res.should.exist;
     res.path.should.exist;
     res.path.should.equal(nodePath.join(preDirPath, 'my-test-file.zip'));
@@ -59,12 +73,13 @@ describe('tempdir', function () {
   });
 
   it('should generate one temp dir used for the life of the process with tempDirectory', async function () {
-    const preDirPath = await tempDir.staticDir();
+    const preDirPath = await tempDir.staticDir(false);
+    process.env.APPIUM_TEMP_DIR = preDirPath;
 
-    let res = await tempDir.staticDir(preDirPath);
+    let res = await tempDir.staticDir();
     res.should.be.a('string');
     await fs.exists(res).should.eventually.be.ok;
-    let res2 = await tempDir.staticDir(preDirPath);
+    let res2 = await tempDir.staticDir();
     await fs.exists(res2).should.eventually.be.ok;
     res.should.equal(res2);
     res.should.equal(preDirPath);
