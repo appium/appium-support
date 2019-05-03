@@ -8,7 +8,7 @@ chai.should();
 describe('tempdir', function () {
   afterEach(function () {
     // set the process env as undefiend
-    delete process.env.APPIUM_TEMP_DIR;
+    delete process.env.APPIUM_TMP_DIR;
   });
 
   it('should be able to generate a path', async function () {
@@ -26,9 +26,9 @@ describe('tempdir', function () {
     path.should.include('myfile.tmp');
   });
 
-  it('should be able to generate a path with process.env.APPIUM_TEMP_DIR', async function () {
+  it('should be able to generate a path with process.env.APPIUM_TMP_DIR', async function () {
     const preRootDirPath = await tempDir.openDir();
-    process.env.APPIUM_TEMP_DIR = preRootDirPath;
+    process.env.APPIUM_TMP_DIR = preRootDirPath;
 
     const path = await tempDir.path({prefix: 'myfile', suffix: '.tmp'});
     path.should.exist;
@@ -36,9 +36,9 @@ describe('tempdir', function () {
     path.should.include('myfile.tmp');
   });
 
-  it('should be able to generate a path with ignoring process.env.APPIUM_TEMP_DIR', async function () {
+  it('should be able to generate a path with ignoring process.env.APPIUM_TMP_DIR', async function () {
     const preDirPath = await tempDir.openDir();
-    process.env.APPIUM_TEMP_DIR = preDirPath;
+    process.env.APPIUM_TMP_DIR = preDirPath;
 
     const path = await tempDir.path({prefix: 'myfile', suffix: '.tmp'}, undefined, null);
     path.should.exist;
@@ -66,9 +66,9 @@ describe('tempdir', function () {
     await fs.exists(res.path).should.eventually.be.ok;
   });
 
-  it('should be able to create a temp file with process.env.APPIUM_TEMP_DIR', async function () {
+  it('should be able to create a temp file with process.env.APPIUM_TMP_DIR', async function () {
     const preRootDirPath = await tempDir.openDir();
-    process.env.APPIUM_TEMP_DIR = preRootDirPath;
+    process.env.APPIUM_TMP_DIR = preRootDirPath;
 
     let res = await tempDir.open({prefix: 'my-test-file', suffix: '.zip'});
     res.should.exist;
@@ -79,9 +79,9 @@ describe('tempdir', function () {
     await fs.exists(res.path).should.eventually.be.ok;
   });
 
-  it('should be able to create a temp file with ignoring process.env.APPIUM_TEMP_DIR', async function () {
+  it('should be able to create a temp file with ignoring process.env.APPIUM_TMP_DIR', async function () {
     const preDirPath = await tempDir.openDir();
-    process.env.APPIUM_TEMP_DIR = preDirPath;
+    process.env.APPIUM_TMP_DIR = preDirPath;
 
     let res = await tempDir.open({prefix: 'my-test-file', suffix: '.zip'}, null);
     res.should.exist;
@@ -100,9 +100,9 @@ describe('tempdir', function () {
     res.should.not.equal(res2);
   });
 
-  it('should generate a random temp dir, but the same with process.env.APPIUM_TEMP_DIR', async function () {
+  it('should generate a random temp dir, but the same with process.env.APPIUM_TMP_DIR', async function () {
     const preRootDirPath = await tempDir.openDir();
-    process.env.APPIUM_TEMP_DIR = preRootDirPath;
+    process.env.APPIUM_TMP_DIR = preRootDirPath;
 
     const res = await tempDir.openDir();
     res.should.be.a('string');
@@ -114,9 +114,9 @@ describe('tempdir', function () {
     res.should.not.equal(res2);
   });
 
-  it('should generate a random temp dir with ignoring process.env.APPIUM_TEMP_DIR', async function () {
+  it('should generate a random temp dir with ignoring process.env.APPIUM_TMP_DIR', async function () {
     let res = await tempDir.openDir();
-    process.env.APPIUM_TEMP_DIR = res;
+    process.env.APPIUM_TMP_DIR = res;
 
     res.should.be.a('string');
     await fs.exists(res).should.eventually.be.ok;
