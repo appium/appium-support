@@ -13,15 +13,18 @@ env:
     - CXX=clang++-5.0
     - CC=clang-5.0
 install:
+  # on node 12 opencv4nodejs and mjpeg-consumer cannot be installed
   - |
-    printf "while [ true ]; do\nsleep 30\necho 'Building OpenCV'\ndone" > ping.sh
-    bash ping.sh &
-    echo $! > ping.pid
-    npm i opencv4nodejs > /dev/null 2>&1
-    kill `cat ping.pid`
+    if [[ `node --version` != v12* ]]; then
+      printf "while [ true ]; do\nsleep 30\necho 'Building OpenCV'\ndone" > ping.sh;
+      bash ping.sh &;
+      echo $! > ping.pid;
+      npm i opencv4nodejs > /dev/null 2>&1;
+      kill `cat ping.pid`;
+
+      npm install --no-save mjpeg-consumer;
+    fi
   - npm install
-  # on node 12 mjpeg-consumer cannot be installed, but we don't want to error
-  - if [[ `node --version` != v12* ]]; then npm install --no-save mjpeg-consumer; fi
 script:
   - npm run test && npm run e2e-test
 after_success:
