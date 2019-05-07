@@ -20,7 +20,8 @@ install:
     npm i opencv4nodejs > /dev/null 2>&1
     kill `cat ping.pid`
   - npm install
-  - npm install --no-save mjpeg-consumer
+  # on node 12 mjpeg-consumer cannot be installed, but we don't want to error
+  - npm install --no-save mjpeg-consumer && echo 'done'
 script:
   - npm run test && npm run e2e-test
 after_success:
