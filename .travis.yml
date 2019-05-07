@@ -21,7 +21,7 @@ install:
     kill `cat ping.pid`
   - npm install
   # on node 12 mjpeg-consumer cannot be installed, but we don't want to error
-  - npm install --no-save mjpeg-consumer && echo 'done'
+  - if [[ `node --version` != v12* ]]; then npm install --no-save mjpeg-consumer; fi
 script:
   - npm run test && npm run e2e-test
 after_success:
