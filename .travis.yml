@@ -16,7 +16,7 @@ install:
   # on node 12 opencv4nodejs and mjpeg-consumer cannot be installed
   - if [[ `node --version` != v12* ]]; then
       printf "while [ true ]; do\nsleep 30\necho 'Building OpenCV'\ndone" > ping.sh;
-      bash ping.sh &;
+      bash ping.sh &
       echo $! > ping.pid;
       npm i opencv4nodejs > /dev/null 2>&1;
       kill `cat ping.pid`;
