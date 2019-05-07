@@ -25,8 +25,12 @@ describe('MJpeg Stream (e2e)', function () {
   });
 
   after(function () {
-    mJpegServer.close();
-    stream.stop(); // ensure streams are always stopped
+    if (mJpegServer) {
+      mJpegServer.close();
+    }
+    if (stream) {
+      stream.stop(); // ensure streams are always stopped
+    }
   });
 
   it('should update mjpeg stream based on new data from mjpeg server', async function () {
