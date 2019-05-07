@@ -13,16 +13,24 @@ const MJPEG_SERVER_PORT = 8589;
 const MJPEG_SERVER_URL = `http://localhost:${MJPEG_SERVER_PORT}`;
 
 describe('MJpeg Stream (e2e)', function () {
-
   let mJpegServer, stream;
 
   before(function () {
+    // TODO: remove when buffertools can handle v12
+    if (process.version.startsWith('v12')) {
+      return this.skip();
+    }
+
     mJpegServer = initMJpegServer(MJPEG_SERVER_PORT);
   });
 
   after(function () {
-    mJpegServer.close();
-    stream.stop(); // ensure streams are always stopped
+    if (mJpegServer) {
+      mJpegServer.close();
+    }
+    if (stream) {
+      stream.stop(); // ensure streams are always stopped
+    }
   });
 
   it('should update mjpeg stream based on new data from mjpeg server', async function () {

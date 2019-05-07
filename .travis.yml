@@ -1,7 +1,7 @@
 language: node_js
 node_js:
-  - "8"
   - "10"
+  - "12"
 addons:
   apt:
     sources:
@@ -13,14 +13,17 @@ env:
     - CXX=clang++-5.0
     - CC=clang-5.0
 install:
-  - |
-    printf "while [ true ]; do\nsleep 30\necho 'Building OpenCV'\ndone" > ping.sh
-    bash ping.sh &
-    echo $! > ping.pid
-    npm i opencv4nodejs > /dev/null 2>&1
-    kill `cat ping.pid`
+  # on node 12 opencv4nodejs and mjpeg-consumer cannot be installed
+  - if [[ `node --version` != v12* ]]; then
+      printf "while [ true ]; do\nsleep 30\necho 'Building OpenCV'\ndone" > ping.sh;
+      bash ping.sh &
+      echo $! > ping.pid;
+      npm i opencv4nodejs > /dev/null 2>&1;
+      kill `cat ping.pid`;
+
+      npm install --no-save mjpeg-consumer;
+    fi
   - npm install
-  - npm install --no-save mjpeg-consumer
 script:
   - npm run test && npm run e2e-test
 after_success:
