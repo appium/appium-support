@@ -6,6 +6,7 @@ import B from 'bluebird';
 import sinon from 'sinon';
 import os from 'os';
 import path from 'path';
+import _ from 'lodash';
 
 const {W3C_WEB_ELEMENT_IDENTIFIER} = util;
 
@@ -200,15 +201,31 @@ describe('util', function () {
 
   describe('safeJsonParse', function () {
     it('should pass object through', function () {
-      let obj = {a: 'a', b: 'b'};
+      const obj = {a: 'a', b: 'b'};
       util.safeJsonParse(obj).should.equal(obj);
     });
     it('should correctly parse json string', function () {
-      let obj = {a: 'a', b: 'b'};
+      const obj = {a: 'a', b: 'b'};
       util.safeJsonParse(JSON.stringify(obj)).should.eql(obj);
     });
+    it('should pass an array through', function () {
+      const arr = ['a', 'b'];
+      util.safeJsonParse(arr).should.eql(arr);
+    });
+    it('should correctly parse json array', function () {
+      const arr = ['a', 'b'];
+      util.safeJsonParse(JSON.stringify(arr)).should.eql(arr);
+    });
+    it('should pass null through', function () {
+      const obj = null;
+      _.isNull(util.safeJsonParse(obj)).should.be.true;
+    });
+    it('should pass simple string through', function () {
+      const str = 'str';
+      util.safeJsonParse(str).should.eql(str);
+    });
     it('should pass a number through', function () {
-      let num = 42;
+      const num = 42;
       util.safeJsonParse(num).should.eql(num);
     });
     it('should make a number from a string representation', function () {
