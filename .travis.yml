@@ -1,3 +1,5 @@
+os: linux
+dist: xenial
 language: node_js
 node_js:
   - "10"
@@ -5,7 +7,7 @@ node_js:
 addons:
   apt:
     sources:
-      - llvm-toolchain-trusty-5.0
+      - llvm-toolchain-r-test
     packages:
       - clang-5.0
 env:
