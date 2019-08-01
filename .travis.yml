@@ -9,11 +9,11 @@ addons:
     sources:
       - llvm-toolchain-r-test
     packages:
-      - g++-6
+      - clang-5.0
 env:
   global:
-    - CC=gcc-6
-    - CXX=g++-6
+    - CXX=clang++-5.0
+    - CC=clang-5.0
 install:
   - |
     printf "while [ true ]; do\nsleep 30\necho 'Building OpenCV'\ndone" > ping.sh;
