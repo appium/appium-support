@@ -9,11 +9,11 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
     packages:
-      - g++-6
+      - clang-5.0
 env:
   global:
-    - CXX=g++-6
-    - CC=gcc-6
+    - CXX=clang++-5.0
+    - CC=clang-5.0
 install:
   - npm install --no-save opencv4nodejs;
   - npm install --no-save mjpeg-consumer;
