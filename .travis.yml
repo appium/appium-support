@@ -1,5 +1,5 @@
 os: linux
-dist: xenial
+dist: trusty
 language: node_js
 node_js:
   - "10"
@@ -7,7 +7,7 @@ node_js:
 addons:
   apt:
     sources:
-      - llvm-toolchain-r-test
+      - ubuntu-toolchain-r-test
     packages:
       - g++-6
 env:
