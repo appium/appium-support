@@ -149,4 +149,23 @@ describe('#zip', function () {
     });
   });
 
+  describe('toArchive', function () {
+    it('should zip all files into an archive', async function () {
+      const testFolder = path.resolve(assetsPath, 'unzipped');
+      const dstPath = path.resolve(tmpRoot, 'test.zip');
+      await zip.toArchive(dstPath, {
+        cwd: testFolder,
+      });
+
+      // Unzip the file and test that it has the same contents as the directory that was zipped
+      await zip.extractAllTo(dstPath, path.resolve(tmpRoot, 'output'));
+      await fs.readFile(path.resolve(tmpRoot, 'output', 'test-dir', 'a.txt'), {
+        encoding: 'utf8'
+      }).should.eventually.equal('Hello World');
+      await fs.readFile(path.resolve(tmpRoot, 'output', 'test-dir', 'b.txt'), {
+        encoding: 'utf8'
+      }).should.eventually.equal('Foo Bar');
+    });
+  });
+
 });
