@@ -16,11 +16,6 @@ describe('MJpeg Stream (e2e)', function () {
   let mJpegServer, stream;
 
   before(function () {
-    // TODO: remove when buffertools can handle v12
-    if (process.version.startsWith('v12')) {
-      return this.skip();
-    }
-
     mJpegServer = initMJpegServer(MJPEG_SERVER_PORT);
   });
 
