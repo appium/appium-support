@@ -138,4 +138,14 @@ describe('fs', function () {
     tests.should.be.an('array');
     tests.should.have.length.above(2);
   });
+  describe('walkDir', function () {
+    it('walkDir recursive', async function () {
+      const sampleBinaryPlist = await fs.walkDir(__dirname, true, (item) => item.endsWith('helpers.js'));
+      sampleBinaryPlist.should.not.be.null;
+    });
+    it('walkDir not recursive', async function () {
+      const sampleBinaryPlist = await fs.walkDir(__dirname, false, (item) => item.endsWith('helpers.plist'));
+      should.equal(sampleBinaryPlist, null);
+    });
+  });
 });
