@@ -138,4 +138,14 @@ describe('fs', function () {
     tests.should.be.an('array');
     tests.should.have.length.above(2);
   });
+  describe('walkDir', function () {
+    it('walkDir recursive', async function () {
+      const filePath = await fs.walkDir(__dirname, true, (item) => item.endsWith('logger/helpers.js'));
+      filePath.should.not.be.null;
+    });
+    it('walkDir not recursive', async function () {
+      const filePath = await fs.walkDir(__dirname, false, (item) => item.endsWith('logger/helpers.js'));
+      should.equal(filePath, null);
+    });
+  });
 });
