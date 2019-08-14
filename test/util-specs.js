@@ -407,4 +407,27 @@ describe('util', function () {
     });
   });
 
+  describe('quote', function () {
+    it('should quote a string with a space', function () {
+      util.quote(['a', 'b', 'c d']).should.eql('a b \'c d\'');
+    });
+    it('should escape double quotes', function () {
+      util.quote(['a', 'b', `it's a "neat thing"`]).should.eql(`a b "it's a \\"neat thing\\""`);
+    });
+    it("should escape $ ` and '", function () {
+      util.quote(['$', '`', `'`]).should.eql('\\$ \\` "\'"');
+    });
+    it('should handle empty array', function () {
+      util.quote([]).should.eql('');
+    });
+    it('should quote a string with newline', function () {
+      util.quote(['a\nb']).should.eql(`'a\nb'`);
+    });
+    it('should stringify booleans', function () {
+      util.quote(['a', 1, true, false]).should.eql('a 1 true false');
+    });
+    it('should stringify null and undefined', function () {
+      util.quote(['a', 1, null, undefined]).should.eql('a 1 null undefined');
+    });
+  });
 });
