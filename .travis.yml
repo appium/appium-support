@@ -1,4 +1,3 @@
-os: linux
 dist: xenial
 language: node_js
 os:
@@ -22,19 +21,23 @@ env:
     - _FORCE_LOGS=1
 install:
   # on node 12 opencv4nodejs and mjpeg-consumer cannot be installed
+  # also handle possible travis caching
   - if [[ `node --version` != v12* ]]; then
-      printf "while [ true ]; do\nsleep 30\necho 'Building OpenCV'\ndone" > ping.sh;
-      bash ping.sh &
-      echo $! > ping.pid;
-      npm install -g opencv4nodejs > /dev/null 2>&1;
-      kill `cat ping.pid`;
+      if [[ $(npm ls --depth 1 -g opencv4nodejs) =~ "── opencv4nodejs@" ]]; then
+        printf "while [ true ]; do\nsleep 30\necho 'Building OpenCV'\ndone" > ping.sh;
+        bash ping.sh &
+        echo $! > ping.pid;
+        npm install -g opencv4nodejs > /dev/null 2>&1;
+        kill `cat ping.pid`;
+      fi
 
-      npm install --no-save mjpeg-consumer;
+      if [[ $(npm ls --depth 1 -g mjpeg-consumer) =~ "── mjpeg-consumer@" ]]; then
+        npm install -g mjpeg-consumer;
+      fi
     fi
   - npm install
 script:
-  - npm ls -g opencv4nodejs -j
-  - ls -la "C:\ProgramData\nvs\node\10.15.2\x64\node_modules\opencv4nodejs"
-  - _FORCE_LOGS=1 npm run e2e-test
+  - npm run test
+  - npm run e2e-test
 after_success:
   - npm run coverage

@@ -10,6 +10,7 @@ import * as process from './lib/process';
 import * as zip from './lib/zip';
 import * as imageUtil from './lib/image-util';
 import * as mjpeg from './lib/mjpeg';
+import * as node from './lib/node';
 
 
 const { fs } = fsIndex;
@@ -18,9 +19,9 @@ const { mkdirp } = mkdirpIndex;
 
 export {
   tempDir, system, util, fs, cancellableDelay, plist, mkdirp, logger, process,
-  zip, imageUtil, net, mjpeg
+  zip, imageUtil, net, mjpeg, node,
 };
 export default {
   tempDir, system, util, fs, cancellableDelay, plist, mkdirp, logger, process,
-  zip, imageUtil, net, mjpeg
+  zip, imageUtil, net, mjpeg, node,
 };

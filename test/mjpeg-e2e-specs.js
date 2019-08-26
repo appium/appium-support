@@ -15,13 +15,13 @@ const MJPEG_SERVER_URL = `http://localhost:${MJPEG_SERVER_PORT}`;
 describe('MJpeg Stream (e2e)', function () {
   let mJpegServer, stream;
 
-  before(function () {
+  before(async function () {
     // TODO: remove when buffertools can handle v12
     if (process.version.startsWith('v12')) {
       return this.skip();
     }
 
-    mJpegServer = initMJpegServer(MJPEG_SERVER_PORT);
+    mJpegServer = await initMJpegServer(MJPEG_SERVER_PORT);
   });
 
   after(function () {
