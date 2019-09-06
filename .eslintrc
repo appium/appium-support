@@ -1,3 +1,6 @@
 {
-  "extends": "appium"
+  "extends": "appium",
+  "globals": {
+    "BigInt": true
+  }
 }
