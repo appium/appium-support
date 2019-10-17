@@ -2,6 +2,7 @@ import { fs, tempDir } from '../index.js';
 import chai from 'chai';
 import path from 'path';
 import { exec } from 'teen_process';
+import B from 'bluebird';
 
 
 let should = chai.should();
@@ -140,7 +141,14 @@ describe('fs', function () {
   });
   describe('walkDir', function () {
     it('walkDir recursive', async function () {
-      const filePath = await fs.walkDir(__dirname, true, (item) => item.endsWith('logger/helpers.js'));
+      const filePath = await fs.walkDir(__dirname, true, async (item) => {
+        if (item.endsWith('logger/helpers.js')) {
+          // This is to verify proper await functionality of the
+          // callback invocation inside the file system walker
+          await B.delay(500);
+          return true;
+        }
+      });
       filePath.should.not.be.null;
     });
     it('walkDir not recursive', async function () {
