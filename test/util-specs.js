@@ -229,8 +229,74 @@ describe('util', function () {
       util.safeJsonParse(num).should.eql(num);
     });
     it('should make a number from a string representation', function () {
-      let num = 42;
+      const num = 42;
       util.safeJsonParse(String(num)).should.eql(num);
+    });
+  });
+
+  describe('jsonStringify', function () {
+    it('should use JSON.stringify if no Buffer involved', function () {
+      const obj = {
+        k1: 'v1',
+        k2: 'v2',
+        k3: 'v3',
+      };
+      const jsonString = JSON.stringify(obj, null, 2);
+      util.jsonStringify(obj).should.eql(jsonString);
+    });
+    it('should serialize a Buffer', function () {
+      const obj = {
+        k1: 'v1',
+        k2: 'v2',
+        k3: Buffer.from('hi how are you today'),
+      };
+      util.jsonStringify(obj).should.include('hi how are you today');
+    });
+    it('should use the replacer function on non-buffer values', function () {
+      const obj = {
+        k1: 'v1',
+        k2: 'v2',
+        k3: 'v3',
+      };
+      function replacer (key, value) {
+        return _.isString(value) ? value.toUpperCase() : value;
+      }
+      const jsonString = util.jsonStringify(obj, replacer);
+      jsonString.should.include('V1');
+      jsonString.should.include('V2');
+      jsonString.should.include('V3');
+    });
+    it('should use the replacer function on buffers', function () {
+      const obj = {
+        k1: 'v1',
+        k2: 'v2',
+        k3: Buffer.from('hi how are you today'),
+      };
+      function replacer (key, value) {
+        return _.isString(value) ? value.toUpperCase() : value;
+      }
+      const jsonString = util.jsonStringify(obj, replacer);
+      jsonString.should.include('V1');
+      jsonString.should.include('V2');
+      jsonString.should.include('HI HOW ARE YOU TODAY');
+    });
+    it('should use the replacer function recursively', function () {
+      const obj = {
+        k1: 'v1',
+        k2: 'v2',
+        k3: Buffer.from('hi how are you today'),
+        k4: {
+          k5: 'v5',
+        },
+      };
+      function replacer (key, value) {
+        return _.isString(value) ? value.toUpperCase() : value;
+      }
+      const jsonString = util.jsonStringify(obj, replacer);
+      jsonString.should.include('V1');
+      jsonString.should.include('V2');
+      jsonString.should.include('HI HOW ARE YOU TODAY');
+      jsonString.should.include('V5');
     });
   });
 
