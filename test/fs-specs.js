@@ -141,15 +141,39 @@ describe('fs', function () {
   });
   describe('walkDir', function () {
     it('walkDir recursive', async function () {
+      let inCallback = 0;
       const filePath = await fs.walkDir(__dirname, true, async (item) => {
         if (item.endsWith('logger/helpers.js')) {
+          ++inCallback;
           // This is to verify proper await functionality of the
           // callback invocation inside the file system walker
           await B.delay(500);
+          --inCallback;
           return true;
         }
       });
+      inCallback.should.equal(0);
       filePath.should.not.be.null;
+    });
+    it('walkDir all elements recursive', async function () {
+      let inCallback = 0;
+      const filePath = await fs.walkDir(__dirname, true, async () => {
+        ++inCallback;
+        await B.delay(500);
+        --inCallback;
+
+      });
+      inCallback.should.equal(0);
+      should.equal(filePath, null);
+    });
+    it('walkDir callback error', async function () {
+      let processed = 0;
+      await chai.expect(fs.walkDir(__dirname, true,
+        () => {
+          ++processed;
+          throw 'Callback error';
+        })).to.be.rejectedWith('Callback error');
+      processed.should.equal(1);
     });
     it('walkDir not recursive', async function () {
       const filePath = await fs.walkDir(__dirname, false, (item) => item.endsWith('logger/helpers.js'));
