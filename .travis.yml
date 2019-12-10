@@ -12,8 +12,7 @@ addons:
     packages:
       - clang-5.0
 cache:
-  directories:
-    - "$(npm root -g)"
+  npm: false
 env:
   global:
     - CXX=clang++-5.0
@@ -23,17 +22,13 @@ install:
   # on node 12 opencv4nodejs and mjpeg-consumer cannot be installed
   # also handle possible travis caching
   - if [[ `node --version` != v12* ]]; then
-      if [[ $(npm ls --depth 1 -g opencv4nodejs) =~ "── opencv4nodejs@" ]]; then
-        printf "while [ true ]; do\nsleep 30\necho 'Building OpenCV'\ndone" > ping.sh;
-        bash ping.sh &
-        echo $! > ping.pid;
-        npm install -g opencv4nodejs > /dev/null 2>&1;
-        kill `cat ping.pid`;
-      fi
+      printf "while [ true ]; do\nsleep 30\necho 'Building OpenCV'\ndone" > ping.sh;
+      bash ping.sh &
+      echo $! > ping.pid;
+      npm install -g opencv4nodejs > /dev/null 2>&1;
+      kill `cat ping.pid`;
 
-      if [[ $(npm ls --depth 1 -g mjpeg-consumer) =~ "── mjpeg-consumer@" ]]; then
-        npm install -g mjpeg-consumer;
-      fi
+      npm install -g mjpeg-consumer;
     fi
   - npm install
 script:
