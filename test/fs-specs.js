@@ -5,9 +5,13 @@ import { exec } from 'teen_process';
 import B from 'bluebird';
 
 
-let should = chai.should();
+const should = chai.should();
+
+const MOCHA_TIMEOUT = 10000;
 
 describe('fs', function () {
+  this.timeout(MOCHA_TIMEOUT);
+
   const existingPath = path.resolve(__dirname, 'fs-specs.js');
   it('should exist', function () {
     should.exist(fs);
@@ -155,7 +159,7 @@ describe('fs', function () {
       inCallback.should.equal(0);
       filePath.should.not.be.null;
     });
-    it('walkDir all elements recursive', async function () {
+    it('should walk all elements recursive', async function () {
       let inCallback = 0;
       const filePath = await fs.walkDir(__dirname, true, async () => {
         ++inCallback;

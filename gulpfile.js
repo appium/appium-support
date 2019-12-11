@@ -9,6 +9,7 @@ boilerplate({
     files: [
       './build/test/**/*-specs.js',
       '!./build/test/assets/**',
+      '!./build/test/images/**',
       '!./build/test/**/*-e2e-specs.js'
     ],
     verbose: true,
