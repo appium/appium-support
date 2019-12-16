@@ -24,6 +24,7 @@ describe('fs', function () {
     should.exist(fs.readlink);
     should.exist(fs.exists);
     should.exist(fs.rimraf);
+    should.exist(fs.rimrafSync);
     should.exist(fs.readFile);
     should.exist(fs.writeFile);
     should.exist(fs.lstat);
@@ -82,6 +83,13 @@ describe('fs', function () {
     await fs.copyFile(existingPath, newPath);
     (await fs.exists(newPath)).should.be.true;
     await fs.rimraf(newPath);
+    (await fs.exists(newPath)).should.be.false;
+  });
+  it('rimrafSync', async function () {
+    let newPath = path.resolve(await tempDir.openDir(), 'fs-specs.js');
+    await fs.copyFile(existingPath, newPath);
+    (await fs.exists(newPath)).should.be.true;
+    fs.rimrafSync(newPath);
     (await fs.exists(newPath)).should.be.false;
   });
   describe('md5', function () {
