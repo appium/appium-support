@@ -7,7 +7,7 @@ import B from 'bluebird';
 
 const should = chai.should();
 
-const MOCHA_TIMEOUT = 10000;
+const MOCHA_TIMEOUT = 20000;
 
 describe('fs', function () {
   this.timeout(MOCHA_TIMEOUT);
