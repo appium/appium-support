@@ -46,7 +46,7 @@ describe('timing', function () {
 
       const timer = new timing.Timer().start();
       const duration = timer.getDuration({
-        units: timing.DURATION_SECONDS,
+        units: timing.DURATION_S,
         round: false,
       });
       duration.duration.should.eql(13.000054321);
@@ -59,7 +59,7 @@ describe('timing', function () {
 
       const timer = new timing.Timer().start();
       const duration = timer.getDuration({
-        units: timing.DURATION_SECONDS,
+        units: timing.DURATION_S,
       });
       duration.duration.should.eql(13);
       duration.units.should.eql('s');
@@ -71,7 +71,7 @@ describe('timing', function () {
 
       const timer = new timing.Timer().start();
       const duration = timer.getDuration({
-        units: timing.DURATION_MILLIS,
+        units: timing.DURATION_MS,
         round: false,
       });
       duration.duration.should.eql(13000.054321);
@@ -84,7 +84,7 @@ describe('timing', function () {
 
       const timer = new timing.Timer().start();
       const duration = timer.getDuration({
-        units: timing.DURATION_NANOS,
+        units: timing.DURATION_NS,
         round: false,
       });
       duration.duration.should.eql(13000054321);
@@ -142,7 +142,7 @@ describe('timing', function () {
 
       const timer = new timing.Timer().start();
       const duration = timer.getDuration({
-        units: timing.DURATION_SECONDS,
+        units: timing.DURATION_S,
         round: false,
       });
       duration.duration.should.be.eql(10.011483102);
@@ -153,7 +153,7 @@ describe('timing', function () {
 
       const timer = new timing.Timer().start();
       const duration = timer.getDuration({
-        units: timing.DURATION_SECONDS,
+        units: timing.DURATION_S,
       });
       duration.duration.should.be.eql(10);
       duration.units.should.eql('s');
@@ -163,7 +163,7 @@ describe('timing', function () {
 
       const timer = new timing.Timer().start();
       const duration = timer.getDuration({
-        units: timing.DURATION_MILLIS,
+        units: timing.DURATION_MS,
         round: false,
       });
       duration.duration.should.be.eql(10011.483102);
@@ -174,7 +174,7 @@ describe('timing', function () {
 
       const timer = new timing.Timer().start();
       const duration = timer.getDuration({
-        units: timing.DURATION_NANOS,
+        units: timing.DURATION_NS,
         round: false,
       });
       duration.duration.should.be.eql(10011483102);
