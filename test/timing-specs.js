@@ -37,58 +37,33 @@ describe('timing', function () {
       const timer = new timing.Timer().start();
       const duration = timer.getDuration();
       _.isNumber(duration.duration).should.be.true;
-      _.isString(duration.units).should.be.true;
     });
-    it('should get correct s', function () {
+    it('should get correct seconds', function () {
       processMock.expects('hrtime').twice()
         .onFirstCall().returns([12, 12345])
         .onSecondCall().returns([13, 54321]);
 
       const timer = new timing.Timer().start();
-      const duration = timer.getDuration({
-        units: timing.DURATION_S,
-        round: false,
-      });
-      duration.duration.should.eql(13.000054321);
-      duration.units.should.eql('s');
+      const duration = timer.getDuration();
+      duration.asSeconds.should.eql(13.000054321);
     });
-    it('should get correct s rounded', function () {
+    it('should get correct milliseconds', function () {
       processMock.expects('hrtime').twice()
         .onFirstCall().returns([12, 12345])
         .onSecondCall().returns([13, 54321]);
 
       const timer = new timing.Timer().start();
-      const duration = timer.getDuration({
-        units: timing.DURATION_S,
-      });
-      duration.duration.should.eql(13);
-      duration.units.should.eql('s');
+      const duration = timer.getDuration();
+      duration.asMilliSeconds.should.eql(13000.054321);
     });
-    it('should get correct ms', function () {
+    it('should get correct nanoseconds', function () {
       processMock.expects('hrtime').twice()
         .onFirstCall().returns([12, 12345])
         .onSecondCall().returns([13, 54321]);
 
       const timer = new timing.Timer().start();
-      const duration = timer.getDuration({
-        units: timing.DURATION_MS,
-        round: false,
-      });
-      duration.duration.should.eql(13000.054321);
-      duration.units.should.eql('ms');
-    });
-    it('should get correct ns', function () {
-      processMock.expects('hrtime').twice()
-        .onFirstCall().returns([12, 12345])
-        .onSecondCall().returns([13, 54321]);
-
-      const timer = new timing.Timer().start();
-      const duration = timer.getDuration({
-        units: timing.DURATION_NS,
-        round: false,
-      });
-      duration.duration.should.eql(13000054321);
-      duration.units.should.eql('ns');
+      const duration = timer.getDuration();
+      duration.asNanoSeconds.should.eql(13000054321);
     });
     it('should error if the timer was not started', function () {
       const timer = new timing.Timer();
@@ -100,11 +75,6 @@ describe('timing', function () {
       timer._startTime = 12345;
       expect(() => timer.getDuration())
         .to.throw('Unable to get duration');
-    });
-    it('should error if passing in wrong unit', function () {
-      const timer = new timing.Timer().start();
-      expect(() => timer.getDuration('ds'))
-        .to.throw('Unknown unit for duration');
     });
   });
   describe('bigint', function () {
@@ -137,48 +107,26 @@ describe('timing', function () {
       const duration = timer.getDuration();
       _.isNumber(duration.duration).should.be.true;
     });
-    it('should get correct s', function () {
+    it('should get correct seconds', function () {
       setupMocks();
 
       const timer = new timing.Timer().start();
-      const duration = timer.getDuration({
-        units: timing.DURATION_S,
-        round: false,
-      });
-      duration.duration.should.be.eql(10.011483102);
-      duration.units.should.eql('s');
+      const duration = timer.getDuration();
+      duration.asSeconds.should.be.eql(10.011483102);
     });
-    it('should get correct s rounded', function () {
+    it('should get correct milliseconds', function () {
       setupMocks();
 
       const timer = new timing.Timer().start();
-      const duration = timer.getDuration({
-        units: timing.DURATION_S,
-      });
-      duration.duration.should.be.eql(10);
-      duration.units.should.eql('s');
+      const duration = timer.getDuration();
+      duration.asMilliSeconds.should.be.eql(10011.483102);
     });
-    it('should get correct ms', function () {
+    it('should get correct nanoseconds', function () {
       setupMocks();
 
       const timer = new timing.Timer().start();
-      const duration = timer.getDuration({
-        units: timing.DURATION_MS,
-        round: false,
-      });
-      duration.duration.should.be.eql(10011.483102);
-      duration.units.should.eql('ms');
-    });
-    it('should get correct ns', function () {
-      setupMocks();
-
-      const timer = new timing.Timer().start();
-      const duration = timer.getDuration({
-        units: timing.DURATION_NS,
-        round: false,
-      });
-      duration.duration.should.be.eql(10011483102);
-      duration.units.should.eql('ns');
+      const duration = timer.getDuration();
+      duration.asNanoSeconds.should.be.eql(10011483102);
     });
     it('should error if the timer was not started', function () {
       const timer = new timing.Timer();
@@ -190,13 +138,6 @@ describe('timing', function () {
       timer._startTime = 12345;
       expect(() => timer.getDuration())
         .to.throw('Unable to get duration');
-    });
-    it('should error if passing in wrong unit', function () {
-      setupMocks(true);
-
-      const timer = new timing.Timer().start();
-      expect(() => timer.getDuration('ds'))
-        .to.throw('Unknown unit for duration');
     });
   });
 });
