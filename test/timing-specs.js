@@ -36,7 +36,7 @@ describe('timing', function () {
     it('should get a duration', function () {
       const timer = new timing.Timer().start();
       const duration = timer.getDuration();
-      _.isNumber(duration.duration).should.be.true;
+      _.isNumber(duration.nanos).should.be.true;
     });
     it('should get correct seconds', function () {
       processMock.expects('hrtime').twice()
@@ -105,7 +105,7 @@ describe('timing', function () {
 
       const timer = new timing.Timer().start();
       const duration = timer.getDuration();
-      _.isNumber(duration.duration).should.be.true;
+      _.isNumber(duration.nanos).should.be.true;
     });
     it('should get correct seconds', function () {
       setupMocks();
