@@ -3,6 +3,7 @@ import chai from 'chai';
 import path from 'path';
 import { exec } from 'teen_process';
 import B from 'bluebird';
+import _ from 'lodash';
 
 
 const should = chai.should();
@@ -176,9 +177,9 @@ describe('fs', function () {
 
       });
       inCallback.should.equal(0);
-      should.equal(filePath, null);
+      _.isNil(filePath).should.be.true;
     });
-    it('walkDir callback error', async function () {
+    it('should throw error through callback', async function () {
       let processed = 0;
       await chai.expect(fs.walkDir(__dirname, true,
         () => {
@@ -187,9 +188,9 @@ describe('fs', function () {
         })).to.be.rejectedWith('Callback error');
       processed.should.equal(1);
     });
-    it('walkDir not recursive', async function () {
+    it('should traverse non-recursively', async function () {
       const filePath = await fs.walkDir(__dirname, false, (item) => item.endsWith('logger/helpers.js'));
-      should.equal(filePath, null);
+      _.isNil(filePath).should.be.true;
     });
   });
 });
