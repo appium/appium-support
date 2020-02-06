@@ -518,10 +518,10 @@ describe('util', function () {
      * is usable through the exported package, and the arguments are correct
      */
     it('should pluralize a string', function () {
-      util.pluralize('word', 2).should.eql('words');
+      util.pluralize({word: 'word', count: 2}).should.eql('words');
     });
     it('should pluralize a string and prepend the number', function () {
-      util.pluralize('word', 2, true).should.eql('2 words');
+      util.pluralize({word: 'word', count: 2, inclusive: true}).should.eql('2 words');
     });
   });
 });
