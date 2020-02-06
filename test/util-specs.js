@@ -510,4 +510,21 @@ describe('util', function () {
       }
     });
   });
+
+  describe('pluralize', function () {
+    /*
+     * The pluralize library (https://github.com/blakeembrey/pluralize)
+     * has a robust set of tests. Here we just need to verify that it
+     * is usable through the exported package, and the arguments are correct
+     */
+    it('should pluralize a string', function () {
+      util.pluralize('word', 2).should.eql('words');
+    });
+    it('should pluralize a string and prepend the number through boolean', function () {
+      util.pluralize('word', 2, true).should.eql('2 words');
+    });
+    it('should pluralize a string and prepend the number through options', function () {
+      util.pluralize('word', 2, {inclusive: true}).should.eql('2 words');
+    });
+  });
 });
