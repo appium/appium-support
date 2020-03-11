@@ -110,8 +110,25 @@ describe('#zip', function () {
       }).should.eventually.equal('Foo Bar');
     });
 
+    it('should convert a local folder to an in-memory base64-encoded zip buffer', async function () {
+      const testFolder = path.resolve(assetsPath, 'unzipped');
+      const buffer = await zip.toInMemoryZip(testFolder, {
+        encodeToBase64: true,
+        level: 6,
+      });
+      Buffer.from(buffer, 'base64').toString('base64').should.eql(buffer.toString());
+    });
+
     it('should be rejected if use a bad path', async function () {
-      await zip.toInMemoryZip(path.resolve(assetsPath, 'bad_path')).should.be.rejectedWith(/Failed to zip/);
+      await zip.toInMemoryZip(path.resolve(assetsPath, 'bad_path'))
+        .should.be.rejectedWith(/Failed to zip/);
+    });
+
+    it('should be rejected if max size is exceeded', async function () {
+      const testFolder = path.resolve(assetsPath, 'unzipped');
+      await zip.toInMemoryZip(testFolder, {
+        maxSize: 1,
+      }).should.be.rejectedWith(/must not be greater/);
     });
 
     it('should be rejected if there is no access to the directory', async function () {
