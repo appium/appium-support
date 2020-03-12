@@ -129,7 +129,7 @@ describe('#zip', function () {
 
     it('should be rejected if use a bad path', async function () {
       await zip.toInMemoryZip(path.resolve(assetsPath, 'bad_path'))
-        .should.be.rejectedWith(/no such/);
+        .should.be.rejectedWith(/no such/i);
     });
 
     it('should be rejected if max size is exceeded', async function () {
