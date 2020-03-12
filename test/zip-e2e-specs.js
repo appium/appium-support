@@ -115,7 +115,7 @@ describe('#zip', function () {
         encodeToBase64: true,
       });
 
-      await fs.writeFile(path.resolve(tmpRoot, 'test.zip'), Buffer.from(buffer, 'base64'));
+      await fs.writeFile(path.resolve(tmpRoot, 'test.zip'), Buffer.from(buffer.toString(), 'base64'));
 
       // Unzip the file and test that it has the same contents as the directory that was zipped
       await zip.extractAllTo(path.resolve(tmpRoot, 'test.zip'), path.resolve(tmpRoot, 'output'));
