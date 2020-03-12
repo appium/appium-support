@@ -4,7 +4,6 @@ import path from 'path';
 import * as zip from '../lib/zip';
 import { tempDir, fs } from '../index';
 import { MockReadWriteStream } from './helpers';
-import sinon from 'sinon';
 
 chai.use(chaiAsPromised);
 
@@ -114,14 +113,23 @@ describe('#zip', function () {
       const testFolder = path.resolve(assetsPath, 'unzipped');
       const buffer = await zip.toInMemoryZip(testFolder, {
         encodeToBase64: true,
-        level: 6,
       });
-      Buffer.from(buffer, 'base64').toString('base64').should.eql(buffer.toString());
+
+      await fs.writeFile(path.resolve(tmpRoot, 'test.zip'), Buffer.from(buffer, 'base64'));
+
+      // Unzip the file and test that it has the same contents as the directory that was zipped
+      await zip.extractAllTo(path.resolve(tmpRoot, 'test.zip'), path.resolve(tmpRoot, 'output'));
+      await fs.readFile(path.resolve(tmpRoot, 'output', 'test-dir', 'a.txt'), {
+        encoding: 'utf8'
+      }).should.eventually.equal('Hello World');
+      await fs.readFile(path.resolve(tmpRoot, 'output', 'test-dir', 'b.txt'), {
+        encoding: 'utf8'
+      }).should.eventually.equal('Foo Bar');
     });
 
     it('should be rejected if use a bad path', async function () {
       await zip.toInMemoryZip(path.resolve(assetsPath, 'bad_path'))
-        .should.be.rejectedWith(/Failed to zip/);
+        .should.be.rejectedWith(/no such/);
     });
 
     it('should be rejected if max size is exceeded', async function () {
@@ -129,13 +137,6 @@ describe('#zip', function () {
       await zip.toInMemoryZip(testFolder, {
         maxSize: 1,
       }).should.be.rejectedWith(/must not be greater/);
-    });
-
-    it('should be rejected if there is no access to the directory', async function () {
-      let fsStub = sinon.stub(fs, 'hasAccess').returns(false);
-      await zip.toInMemoryZip('/path/to/some/directory')
-        .should.be.rejectedWith(/Failed to zip directory/);
-      fsStub.restore();
     });
   });
 
