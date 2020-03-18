@@ -86,6 +86,11 @@ describe('fs', function () {
     await fs.rimraf(newPath);
     (await fs.exists(newPath)).should.be.false;
   });
+  it('sanitizeName', function () {
+    fs.sanitizeName(':file?.txt', {
+      replacement: '-',
+    }).should.eql('-file-.txt');
+  });
   it('rimrafSync', async function () {
     let newPath = path.resolve(await tempDir.openDir(), 'fs-specs.js');
     await fs.copyFile(existingPath, newPath);
