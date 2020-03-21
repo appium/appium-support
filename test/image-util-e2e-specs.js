@@ -120,11 +120,12 @@ describe('image-util', function () {
 
     describe('getImageOccurrence', function () {
       it('should calculate the partial image position in the full image', async function () {
-        const {rect} = await getImageOccurrence(fullImage, partialImage);
+        const {rect, score} = await getImageOccurrence(fullImage, partialImage);
         rect.x.should.be.above(0);
         rect.y.should.be.above(0);
         rect.width.should.be.above(0);
         rect.height.should.be.above(0);
+        score.should.be.above(0);
       });
 
       it('should reject matches that fall below a threshold', async function () {
