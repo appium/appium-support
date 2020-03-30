@@ -35,7 +35,7 @@
     "bluebird": "^3.5.1",
     "bplist-creator": "^0",
     "bplist-parser": "^0.2",
-    "extract-zip": "^1.6.0",
+    "extract-zip": "^2.0.0",
     "glob": "^7.1.2",
     "jimp": "^0.10.0",
     "jsftp": "^2.1.2",
