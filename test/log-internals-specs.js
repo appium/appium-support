@@ -51,6 +51,16 @@ describe('Log Internals', function () {
     preprocessor.preprocess(':yolo" yo Yolo yyolo').should.eql(`${replacer2}${replacer}" yo ${replacer} yyolo`);
   });
 
+  it(`should preprocess a string and apply a rule where 'pattern' has priority over 'text'`, async function () {
+    const replacer = '***';
+    const issues = await preprocessor.loadRules([
+      { pattern: '^:', text: 'yo', replacer },
+    ]);
+    issues.length.should.eql(0);
+    preprocessor.rules.length.should.eql(1);
+    preprocessor.preprocess(':yolo" yo Yolo yyolo').should.eql(`${replacer}yolo" yo Yolo yyolo`);
+  });
+
   it('should preprocess a string and make replacements with multiple complex rules and issues', async function () {
     const replacer2 = '***';
     const issues = await preprocessor.loadRules([
