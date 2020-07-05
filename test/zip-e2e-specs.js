@@ -100,7 +100,9 @@ describe('#zip', function () {
       await fs.writeFile(path.resolve(tmpRoot, 'test.zip'), buffer);
 
       // Unzip the file and test that it has the same contents as the directory that was zipped
-      await zip.extractAllTo(path.resolve(tmpRoot, 'test.zip'), path.resolve(tmpRoot, 'output'));
+      await zip.extractAllTo(path.resolve(tmpRoot, 'test.zip'), path.resolve(tmpRoot, 'output'), {
+        fileNamesEncoding: 'utf8'
+      });
       await fs.readFile(path.resolve(tmpRoot, 'output', 'test-dir', 'a.txt'), {
         encoding: 'utf8'
       }).should.eventually.equal('Hello World');
