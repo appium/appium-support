@@ -58,8 +58,7 @@ describe('#util', function () {
 
     afterEach(async function () {
       try {
-        await fs.unlink(lockFile);
-        await fs.unlink(testFile);
+        await B.all([lockFile, testFile].map((p) => fs.unlink(p)));
       } catch (ign) {}
     });
 
@@ -70,6 +69,17 @@ describe('#util', function () {
       await B.delay(200);
       await guard.check().should.eventually.be.true;
       await guardPromise;
+      await guard.check().should.eventually.be.false;
+      await testFileContents().should.eventually.eql('ab');
+    });
+
+    it('should recover a broken lock file', async function () {
+      await fs.writeFile(lockFile, 'dummy', 'utf8');
+      const guard = util.getLockFileGuard(lockFile, {
+        timeout: 3,
+        tryRecovery: true,
+      });
+      await guard(async () => await guardedBehavior('b', 500));
       await guard.check().should.eventually.be.false;
       await testFileContents().should.eventually.eql('ab');
     });
