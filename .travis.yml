@@ -20,16 +20,16 @@ env:
     - CXX=clang++-5.0
     - CC=clang-5.0
     - _FORCE_LOGS=1
+    - NODE_PATH="$(npm root -g)"
 install:
-  # on node 12 opencv4nodejs and mjpeg-consumer cannot be installed
-  # also handle possible travis caching
+  # handle possible travis caching
+  - if [[ $(npm ls --depth 1 -g opencv4nodejs) =~ "── opencv4nodejs@" ]]; then
+      echo 'Already installed opencv4nodejs';
+    else
+      npm install -g opencv4nodejs;
+    fi
+  # on node 12 mjpeg-consumer cannot be installed
   - if [[ `node --version` != v12* ]]; then
-      if [[ $(npm ls --depth 1 -g opencv4nodejs) =~ "── opencv4nodejs@" ]]; then
-        echo 'Already installed opencv4nodejs';
-      else
-        npm install -g opencv4nodejs;
-      fi
-
       if [[ $(npm ls --depth 1 -g mjpeg-consumer) =~ "── mjpeg-consumer@" ]]; then
         echo 'Already have mjpeg-consumer';
       else
