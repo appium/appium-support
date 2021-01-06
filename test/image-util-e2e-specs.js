@@ -144,15 +144,15 @@ describe('image-util', function () {
     describe('getImageOccurrences', function () {
       it('should return matches in the full image', async function () {
         const occurrences = await getImageOccurrences(originalImage, numberImage, {threshold: 0.8});
-        occurrences.results.length.should.be.eq(3);
+        occurrences.length.should.be.eq(3);
 
-        occurrences.results.forEach((occurrence) => {
+        for (const occurrence of occurrences) {
           occurrence.rect.x.should.be.above(0);
           occurrence.rect.y.should.be.above(0);
           occurrence.rect.width.should.be.above(0);
           occurrence.rect.height.should.be.above(0);
           occurrence.score.should.be.above(0);
-        });
+        }
       });
 
       it('should reject matches that fall below a threshold', async function () {
@@ -162,7 +162,9 @@ describe('image-util', function () {
 
       it('should visualize the partial image position in the full image', async function () {
         const occurrences = await getImageOccurrences(originalImage, numberImage, {visualize: true});
-        occurrences.visualization.should.not.be.empty;
+        for (const occurrence of occurrences) {
+          occurrence.visualization.should.not.be.empty;
+        }
       });
     });
   });
