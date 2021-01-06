@@ -143,15 +143,15 @@ describe('image-util', function () {
 
     describe('getImageOccurrences', function () {
       it('should return matches in the full image', async function () {
-        const occurrences = await getImageOccurrences(originalImage, numberImage, {threshold: 0.8});
-        occurrences.length.should.be.eq(3);
+        const {results} = await getImageOccurrences(originalImage, numberImage, {threshold: 0.8});
+        results.length.should.be.eq(3);
 
-        for (const occurrence of occurrences) {
-          occurrence.rect.x.should.be.above(0);
-          occurrence.rect.y.should.be.above(0);
-          occurrence.rect.width.should.be.above(0);
-          occurrence.rect.height.should.be.above(0);
-          occurrence.score.should.be.above(0);
+        for (const result of results) {
+          result.rect.x.should.be.above(0);
+          result.rect.y.should.be.above(0);
+          result.rect.width.should.be.above(0);
+          result.rect.height.should.be.above(0);
+          result.score.should.be.above(0);
         }
       });
 
@@ -161,9 +161,14 @@ describe('image-util', function () {
       });
 
       it('should visualize the partial image position in the full image', async function () {
-        const occurrences = await getImageOccurrences(originalImage, numberImage, {visualize: true});
-        for (const occurrence of occurrences) {
-          occurrence.visualization.should.not.be.empty;
+        const {results, visualization} = await getImageOccurrences(originalImage, numberImage, {visualize: true});
+
+        visualization.should.not.be.empty;
+
+        for (const result of results) {
+          result.visualization.should.not.be.empty;
+        }
+      });
         }
       });
     });
