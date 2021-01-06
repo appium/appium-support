@@ -144,7 +144,6 @@ describe('image-util', function () {
     describe('getImageOccurrences', function () {
       it('should return matches in the full image', async function () {
         const occurrences = await getImageOccurrences(originalImage, numberImage, {threshold: 0.8});
-        occurrences.results.should.not.be.empty;
         occurrences.results.length.should.be.eq(3);
 
         occurrences.results.forEach((occurrence) => {
