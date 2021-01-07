@@ -143,9 +143,9 @@ describe('image-util', function () {
       describe('multiple', function () {
         it('should return matches in the full image', async function () {
           const { multiple } = await getImageOccurrence(originalImage, numberImage, {threshold: 0.8, multiple: true});
-          multiple.results.length.should.be.eq(3);
+          multiple.length.should.be.eq(3);
 
-          for (const result of multiple.results) {
+          for (const result of multiple) {
             result.rect.x.should.be.above(0);
             result.rect.y.should.be.above(0);
             result.rect.width.should.be.above(0);
@@ -162,9 +162,7 @@ describe('image-util', function () {
         it('should visualize the partial image position in the full image', async function () {
           const { multiple } = await getImageOccurrence(originalImage, numberImage, {visualize: true, multiple: true});
 
-          multiple.visualization.should.not.be.empty;
-
-          for (const result of multiple.results) {
+          for (const result of multiple) {
             result.visualization.should.not.be.empty;
           }
         });
