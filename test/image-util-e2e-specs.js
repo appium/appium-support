@@ -61,6 +61,7 @@ describe('image-util', function () {
     let originalImage = null;
     let changedImage = null;
     let rotatedImage = null;
+    let numberImage = null;
 
     before(async function () {
       const imagePath = path.resolve(FIXTURES_ROOT, 'full-image.b64');
@@ -69,6 +70,7 @@ describe('image-util', function () {
       partialImage = await fs.readFile(path.resolve(FIXTURES_ROOT, 'waldo.jpg'));
       originalImage = await fs.readFile(path.resolve(FIXTURES_ROOT, 'cc1.png'));
       changedImage = await fs.readFile(path.resolve(FIXTURES_ROOT, 'cc2.png'));
+      numberImage = await fs.readFile(path.resolve(FIXTURES_ROOT, 'number5.png'));
       rotatedImage = await fs.readFile(path.resolve(FIXTURES_ROOT, 'cc_rotated.png'));
     });
 
@@ -136,6 +138,34 @@ describe('image-util', function () {
       it('should visualize the partial image position in the full image', async function () {
         const {visualization} = await getImageOccurrence(fullImage, partialImage, {visualize: true});
         visualization.should.not.be.empty;
+      });
+
+      describe('multiple', function () {
+        it('should return matches in the full image', async function () {
+          const { multiple } = await getImageOccurrence(originalImage, numberImage, {threshold: 0.8, multiple: true});
+          multiple.length.should.be.eq(3);
+
+          for (const result of multiple) {
+            result.rect.x.should.be.above(0);
+            result.rect.y.should.be.above(0);
+            result.rect.width.should.be.above(0);
+            result.rect.height.should.be.above(0);
+            result.score.should.be.above(0);
+          }
+        });
+
+        it('should reject matches that fall below a threshold', async function () {
+          await getImageOccurrence(originalImage, numberImage, {threshold: 1.0, multiple: true})
+            .should.eventually.be.rejectedWith(/threshold/);
+        });
+
+        it('should visualize the partial image position in the full image', async function () {
+          const { multiple } = await getImageOccurrence(originalImage, numberImage, {visualize: true, multiple: true});
+
+          for (const result of multiple) {
+            result.visualization.should.not.be.empty;
+          }
+        });
       });
     });
   });
