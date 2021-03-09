@@ -35,7 +35,7 @@
     "base64-stream": "^1.0.0",
     "bluebird": "^3.5.1",
     "bplist-creator": "^0",
-    "bplist-parser": "^0.2",
+    "bplist-parser": "^0.3",
     "form-data": "^3.0.0",
     "get-stream": "^6.0.0",
     "glob": "^7.1.2",
