@@ -52,7 +52,7 @@
     "npmlog": "^4.1.2",
     "plist": "^3.0.1",
     "pluralize": "^8.0.0",
-    "pngjs": "^5.0.0",
+    "pngjs": "^6.0.0",
     "rimraf": "^3.0.0",
     "sanitize-filename": "^1.6.1",
     "semver": "^7.0.0",
