@@ -1,6 +1,8 @@
-import { base64ToImage, imageToBase64, cropImage,
-         getImagesMatches, getImagesSimilarity, getImageOccurrence,
-         getJimpImage, MIME_PNG } from '../lib/image-util';
+import {
+  base64ToImage, imageToBase64, cropImage,
+  getImagesMatches, getImagesSimilarity, getImageOccurrence,
+  getJimpImage, MIME_PNG,
+} from '../lib/image-util';
 import path from 'path';
 import _ from 'lodash';
 import chai from 'chai';
