@@ -19,10 +19,8 @@ async function getImage (name) {
 
 describe('image-util', function () {
   before(function () {
-    // TODO: remove when opencv4nodejs can handle v12
-    if (process.version.startsWith('v12')) {
-      return this.skip();
-    }
+    // TODO: remove when opencv4nodejs is fixed
+    return this.skip();
   });
 
   describe('cropBase64Image', function () {
