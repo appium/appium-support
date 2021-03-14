@@ -1,6 +1,8 @@
-import { base64ToImage, imageToBase64, cropImage,
-         getImagesMatches, getImagesSimilarity, getImageOccurrence,
-         getJimpImage, MIME_PNG } from '../lib/image-util';
+import {
+  base64ToImage, imageToBase64, cropImage,
+  getImagesMatches, getImagesSimilarity, getImageOccurrence,
+  getJimpImage, MIME_PNG,
+} from '../lib/image-util';
 import path from 'path';
 import _ from 'lodash';
 import chai from 'chai';
@@ -19,10 +21,8 @@ async function getImage (name) {
 
 describe('image-util', function () {
   before(function () {
-    // TODO: remove when opencv4nodejs can handle v12
-    if (process.version.startsWith('v12')) {
-      return this.skip();
-    }
+    // TODO: remove when opencv4nodejs is fixed
+    return this.skip();
   });
 
   describe('cropBase64Image', function () {
