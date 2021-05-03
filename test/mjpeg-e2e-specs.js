@@ -84,7 +84,7 @@ describe('MJpeg Stream (e2e)', function () {
 
     // verify we can get the base64 version too
     const b64 = stream.lastChunkBase64;
-    b64.should.eql(mjpeg.TEST_IMG_JPG);
+    b64.should.eql(TEST_IMG_JPG);
 
     // verify we can get the PNG version too
     const png = await stream.lastChunkPNGBase64();
