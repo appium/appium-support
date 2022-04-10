@@ -6,6 +6,11 @@ import { logger } from '../..';
 
 chai.should();
 
+function setTime (time) {
+  sinon.useFakeTimers(time);
+  return sinon.clock.restore;
+}
+
 function setupWriters () {
   return {'stdout': sinon.spy(process.stdout, 'write'),
           'stderr': sinon.spy(process.stderr, 'write')};
@@ -52,5 +57,5 @@ function assertOutputDoesntContain (writers, output) {
 
 export {
   setupWriters, restoreWriters, assertOutputContains, assertOutputDoesntContain,
-  getDynamicLogger,
+  getDynamicLogger, setTime
 };

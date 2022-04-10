@@ -1,7 +1,7 @@
 // transpile:mocha
 
 import { getDynamicLogger, restoreWriters, setupWriters,
-         assertOutputContains, assertOutputDoesntContain } from './helpers';
+         assertOutputContains, assertOutputDoesntContain, setTime } from './helpers';
 
 const LOG_LEVELS = ['silly', 'verbose', 'info', 'http', 'warn', 'error'];
 
@@ -108,5 +108,39 @@ describe('normal logger with dynamic prefix', function () {
     (() => { log.errorAndThrow('msg'); }).should.throw('msg');
     assertOutputContains(writers, 'error');
     assertOutputContains(writers, PREFIX);
+  });
+
+});
+
+describe('normal logger with timestamp', function () {
+  let writers, log;
+
+  before(function () {
+    process.env._LOG_TIMESTAMP = 1;
+    writers = setupWriters();
+    log = getDynamicLogger(false, false);
+    log.level = 'silly';
+  });
+
+  after(function () {
+    restoreWriters(writers);
+    process.env._LOG_TIMESTAMP = 0;
+  });
+
+  it('should output timestamp with _LOG_TIMESTAMP env var', function () {
+    const now = new Date();
+    const HH = now.getHours().toString().padStart(2, '0');
+    const mm = now.getMinutes().toString().padStart(2, '0');
+    const ss = now.getSeconds().toString().padStart(2, '0');
+    const SSS = now.getMilliseconds().toString();
+
+    const restoreTime = setTime(now);
+
+    const expectedTimestamp = `${HH}-${mm}-${ss}:${SSS}`;
+    for (const levelName of LOG_LEVELS) {
+      log[levelName](levelName);
+      assertOutputContains(writers, expectedTimestamp);
+    }
+    restoreTime();
   });
 });
